@@ -13,14 +13,13 @@
             ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
             ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
             SelectCommand="SELECT CUSTOMER_ID, CUSTOMER_NAME, ADDRESS, EMAIL, CONTACT_NUMBER FROM CUSTOMER"
-            InsertCommand="INSERT INTO CUSTOMER (CUSTOMER_ID, CUSTOMER_NAME, ADDRESS, EMAIL, CONTACT_NUMBER) VALUES (:CUSTOMER_ID, :CUSTOMER_NAME, :ADDRESS, :EMAIL, :CONTACT_NUMBER)"
+            InsertCommand="INSERT INTO CUSTOMER (CUSTOMER_ID, CUSTOMER_NAME, ADDRESS, EMAIL, CONTACT_NUMBER) VALUES ((SELECT NVL(MAX(CUSTOMER_ID), 0) + 1 FROM CUSTOMER), :CUSTOMER_NAME, :ADDRESS, :EMAIL, :CONTACT_NUMBER)"
             UpdateCommand="UPDATE CUSTOMER SET CUSTOMER_NAME = :CUSTOMER_NAME, ADDRESS = :ADDRESS, EMAIL = :EMAIL, CONTACT_NUMBER = :CONTACT_NUMBER WHERE CUSTOMER_ID = :CUSTOMER_ID"
             DeleteCommand="DELETE FROM CUSTOMER WHERE CUSTOMER_ID = :CUSTOMER_ID">
             <DeleteParameters>
-                <asp:Parameter Name="CUSTOMER_ID" Type="String" />
+                <asp:Parameter Name="CUSTOMER_ID" Type="Int32" />
             </DeleteParameters>
             <InsertParameters>
-                <asp:Parameter Name="CUSTOMER_ID" Type="String" />
                 <asp:Parameter Name="CUSTOMER_NAME" Type="String" />
                 <asp:Parameter Name="ADDRESS" Type="String" />
                 <asp:Parameter Name="EMAIL" Type="String" />
@@ -31,7 +30,7 @@
                 <asp:Parameter Name="ADDRESS" Type="String" />
                 <asp:Parameter Name="EMAIL" Type="String" />
                 <asp:Parameter Name="CONTACT_NUMBER" Type="String" />
-                <asp:Parameter Name="CUSTOMER_ID" Type="String" />
+                <asp:Parameter Name="CUSTOMER_ID" Type="Int32" />
             </UpdateParameters>
         </asp:SqlDataSource>
 
@@ -52,9 +51,6 @@
             <h2>Add New Customer</h2>
             <asp:FormView ID="FormView1" runat="server" DataKeyNames="CUSTOMER_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
                 <InsertItemTemplate>
-                    CUSTOMER_ID:
-                    <asp:TextBox ID="CUSTOMER_IDTextBox" runat="server" Text='<%# Bind("CUSTOMER_ID") %>' />
-                    <br />
                     CUSTOMER_NAME:
                     <asp:TextBox ID="CUSTOMER_NAMETextBox" runat="server" Text='<%# Bind("CUSTOMER_NAME") %>' />
                     <br />
