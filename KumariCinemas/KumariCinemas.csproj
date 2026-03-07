@@ -123,7 +123,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Customer.aspx" />
     <Content Include="CustomerTicket.aspx" />
-    <Content Include="Customer_MasterPageExample.aspx" />
     <Content Include="Hall.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Movie.aspx" />
@@ -245,6 +244,9 @@
     <Content Include="GRIDVIEW_COLUMN_HEADER_FIX.md" />
     <Content Include="GRIDVIEW_DATABASE_ALIGNMENT_FIX.md" />
     <Content Include="CUSTOMER_DATA_MISMATCH_FIX.md" />
+    <Content Include="COMPREHENSIVE_VALIDATION_IMPLEMENTATION.md" />
+    <Content Include="BUILD_ERROR_RESOLUTION.md" />
+    <Content Include="BUILD_SUCCESS_SUMMARY.md" />
     <None Include="Oracle.DataAccess.Common.Configuration.Section.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -266,6 +268,8 @@
     <Content Include="SCROLL_FIX_SUMMARY.md" />
     <Content Include="SCROLL_FIX_QUICK_REFERENCE.md" />
     <Content Include="SCROLL_FIX_STATUS.md" />
+    <Content Include="VALIDATION_IMPLEMENTATION_SUMMARY.md" />
+    <Content Include="VALIDATION_TESTING_GUIDE.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

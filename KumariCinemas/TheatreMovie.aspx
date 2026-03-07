@@ -20,6 +20,11 @@
                 </h3>
             </div>
             <div class="filter-card-body">
+                <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+                    ValidationGroup="TheatreSearch" 
+                    CssClass="alert alert-danger" 
+                    HeaderText="Please correct the following errors:" 
+                    DisplayMode="BulletList" />
                 <div class="row align-items-end">
                     <div class="col-md-8 mb-3 mb-md-0">
                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -35,12 +40,21 @@
                             AppendDataBoundItems="True">
                             <asp:ListItem Text="-- Select Theatre --" Value="" />
                         </asp:DropDownList>
+                        <asp:RequiredFieldValidator ID="rfvTheatre" runat="server" 
+                            ControlToValidate="ddlTheatre" 
+                            ValidationGroup="TheatreSearch" 
+                            ErrorMessage="Please select a theatre" 
+                            Display="Dynamic" 
+                            CssClass="text-danger small" 
+                            Text="* Please select a theatre" />
                     </div>
                     <div class="col-md-4">
                         <asp:LinkButton
                             ID="btnSearch"
                             runat="server"
                             CssClass="btn btn-emerald w-100"
+                            CausesValidation="True"
+                            ValidationGroup="TheatreSearch"
                             OnClick="btnSearch_Click">
                             <i class="fas fa-search me-2"></i>Generate Report
                         </asp:LinkButton>

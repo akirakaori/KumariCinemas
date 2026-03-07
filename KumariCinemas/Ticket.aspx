@@ -52,6 +52,11 @@
                     <div class="crud-card-body">
                         <asp:FormView ID="FormView1" runat="server" DataKeyNames="TICKET_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
                             <InsertItemTemplate>
+                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+                                    ValidationGroup="TicketInsert" 
+                                    CssClass="alert alert-danger" 
+                                    HeaderText="Please correct the following errors:" 
+                                    DisplayMode="BulletList" />
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -61,6 +66,13 @@
                                             Text='<%# Bind("SEAT_NUMBER") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. B-12" />
+                                        <asp:RequiredFieldValidator ID="rfvSeatNumber" runat="server" 
+                                            ControlToValidate="SEAT_NUMBERTextBox" 
+                                            ValidationGroup="TicketInsert" 
+                                            ErrorMessage="Seat Number is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Seat Number is required" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -72,6 +84,13 @@
                                             TextMode="Number"
                                             step="0.01"
                                             placeholder="0.00" />
+                                        <asp:RequiredFieldValidator ID="rfvTicketPrice" runat="server" 
+                                            ControlToValidate="TICKET_PRICETextBox" 
+                                            ValidationGroup="TicketInsert" 
+                                            ErrorMessage="Ticket Price is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Ticket Price is required" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -81,6 +100,13 @@
                                             Text='<%# Bind("BOOKING_DATE") %>' 
                                             CssClass="form-control"
                                             TextMode="Date" />
+                                        <asp:RequiredFieldValidator ID="rfvBookingDate" runat="server" 
+                                            ControlToValidate="BOOKING_DATETextBox" 
+                                            ValidationGroup="TicketInsert" 
+                                            ErrorMessage="Booking Date is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Booking Date is required" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -90,11 +116,19 @@
                                             Text='<%# Bind("STATUS") %>' 
                                             CssClass="form-control"
                                             placeholder="All Statuses" />
+                                        <asp:RequiredFieldValidator ID="rfvStatus" runat="server" 
+                                            ControlToValidate="STATUSTextBox" 
+                                            ValidationGroup="TicketInsert" 
+                                            ErrorMessage="Status is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Status is required" />
                                     </div>
                                     <div class="col-12">
                                         <asp:LinkButton ID="InsertButton" runat="server" 
                                             CausesValidation="True" 
                                             CommandName="Insert" 
+                                            ValidationGroup="TicketInsert" 
                                             CssClass="btn btn-emerald">
                                             <i class="fas fa-save me-2"></i>Save Record
                                         </asp:LinkButton>

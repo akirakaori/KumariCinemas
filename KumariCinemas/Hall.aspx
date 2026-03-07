@@ -50,6 +50,11 @@
                     <div class="crud-card-body">
                         <asp:FormView ID="FormView1" runat="server" DataKeyNames="HALL_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
                             <InsertItemTemplate>
+                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+                                    ValidationGroup="HallInsert" 
+                                    CssClass="alert alert-danger" 
+                                    HeaderText="Please correct the following errors:" 
+                                    DisplayMode="BulletList" />
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -59,6 +64,13 @@
                                             Text='<%# Bind("HALL_NAME") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. Screen 01 or IMAX Hall" />
+                                        <asp:RequiredFieldValidator ID="rfvHallName" runat="server" 
+                                            ControlToValidate="HALL_NAMETextBox" 
+                                            ValidationGroup="HallInsert" 
+                                            ErrorMessage="Hall Name is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Hall Name is required" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -68,6 +80,13 @@
                                             Text='<%# Bind("HALL_TYPE") %>' 
                                             CssClass="form-control"
                                             placeholder="Select Hall Type" />
+                                        <asp:RequiredFieldValidator ID="rfvHallType" runat="server" 
+                                            ControlToValidate="HALL_TYPETextBox" 
+                                            ValidationGroup="HallInsert" 
+                                            ErrorMessage="Hall Type is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Hall Type is required" />
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -78,11 +97,19 @@
                                             CssClass="form-control"
                                             TextMode="Number"
                                             placeholder="Total seats" />
+                                        <asp:RequiredFieldValidator ID="rfvCapacity" runat="server" 
+                                            ControlToValidate="HALL_CAPACITYTextBox" 
+                                            ValidationGroup="HallInsert" 
+                                            ErrorMessage="Seating Capacity is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Seating Capacity is required" />
                                     </div>
                                     <div class="col-12">
                                         <asp:LinkButton ID="InsertButton" runat="server" 
                                             CausesValidation="True" 
                                             CommandName="Insert" 
+                                            ValidationGroup="HallInsert" 
                                             CssClass="btn btn-emerald">
                                             <i class="fas fa-plus-circle me-2"></i>Add Hall Record
                                         </asp:LinkButton>

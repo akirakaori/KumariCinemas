@@ -50,8 +50,13 @@
                         <small class="text-muted">Enter customer details to register a new record or update existing ones.</small>
                     </div>
                     <div class="crud-card-body">
-                        <asp:FormView ID="FormView1" runat="server" DataKeyNames="CUSTOMER_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
+                        <asp:FormView ID="FormView1" runat="server" DataKeyNames="CUSTOMER_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert" OnItemInserting="FormView1_ItemInserting" OnItemUpdating="FormView1_ItemUpdating">
                             <InsertItemTemplate>
+                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+                                    ValidationGroup="CustomerInsert" 
+                                    CssClass="alert alert-danger" 
+                                    HeaderText="Please correct the following errors:" 
+                                    DisplayMode="BulletList" />
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -60,7 +65,23 @@
                                         <asp:TextBox ID="CUSTOMER_NAMETextBox" runat="server" 
                                             Text='<%# Bind("CUSTOMER_NAME") %>' 
                                             CssClass="form-control"
-                                            placeholder="e.g. John Doe" />
+                                            placeholder="e.g. John Doe" 
+                                            MaxLength="100" />
+                                        <asp:RequiredFieldValidator ID="rfvCustomerName" runat="server" 
+                                            ControlToValidate="CUSTOMER_NAMETextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Customer Name is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Customer Name is required" />
+                                        <asp:RegularExpressionValidator ID="revCustomerName" runat="server" 
+                                            ControlToValidate="CUSTOMER_NAMETextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Name must contain only letters and spaces (2-100 characters)" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            ValidationExpression="^[a-zA-Z\s]{2,100}$"
+                                            Text="* Name must be 2-100 letters only" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -69,7 +90,23 @@
                                         <asp:TextBox ID="EMAILTextBox" runat="server" 
                                             Text='<%# Bind("EMAIL") %>' 
                                             CssClass="form-control"
+                                            TextMode="Email"
                                             placeholder="john@example.com" />
+                                        <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
+                                            ControlToValidate="EMAILTextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Email Address is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Email Address is required" />
+                                        <asp:RegularExpressionValidator ID="revEmail" runat="server" 
+                                            ControlToValidate="EMAILTextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Please enter a valid email address (e.g., user@domain.com)" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            ValidationExpression="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                            Text="* Invalid email format" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -78,7 +115,22 @@
                                         <asp:TextBox ID="CONTACT_NUMBERTextBox" runat="server" 
                                             Text='<%# Bind("CONTACT_NUMBER") %>' 
                                             CssClass="form-control"
-                                            placeholder="+94 XX XXX XXXX" />
+                                            placeholder="+94 XX XXX XXXX or 10-digit number" />
+                                        <asp:RequiredFieldValidator ID="rfvContactNumber" runat="server" 
+                                            ControlToValidate="CONTACT_NUMBERTextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Phone Number is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Phone Number is required" />
+                                        <asp:RegularExpressionValidator ID="revContactNumber" runat="server" 
+                                            ControlToValidate="CONTACT_NUMBERTextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Please enter a valid phone number (10 digits or +94XXXXXXXXX format)" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            ValidationExpression="^(\+94[0-9]{9}|[0-9]{10})$"
+                                            Text="* Invalid phone format (use 10 digits or +94XXXXXXXXX)" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -88,11 +140,19 @@
                                             Text='<%# Bind("ADDRESS") %>' 
                                             CssClass="form-control"
                                             placeholder="Detailed physical address..." />
+                                        <asp:RequiredFieldValidator ID="rfvAddress" runat="server" 
+                                            ControlToValidate="ADDRESSTextBox" 
+                                            ValidationGroup="CustomerInsert" 
+                                            ErrorMessage="Address is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Address is required" />
                                     </div>
                                     <div class="col-12">
                                         <asp:LinkButton ID="InsertButton" runat="server" 
                                             CausesValidation="True" 
                                             CommandName="Insert" 
+                                            ValidationGroup="CustomerInsert" 
                                             CssClass="btn btn-emerald">
                                             <i class="fas fa-save me-2"></i>Save Record
                                         </asp:LinkButton>

@@ -54,6 +54,11 @@
                     <div class="crud-card-body">
                         <asp:FormView ID="FormView1" runat="server" DataKeyNames="MOVIE_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
                             <InsertItemTemplate>
+                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+                                    ValidationGroup="MovieInsert" 
+                                    CssClass="alert alert-danger" 
+                                    HeaderText="Please correct the following errors:" 
+                                    DisplayMode="BulletList" />
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -63,6 +68,13 @@
                                             Text='<%# Bind("TITLE") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. Inception" />
+                                        <asp:RequiredFieldValidator ID="rfvTitle" runat="server" 
+                                            ControlToValidate="TITLETextBox" 
+                                            ValidationGroup="MovieInsert" 
+                                            ErrorMessage="Movie Title is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Movie Title is required" />
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -73,6 +85,13 @@
                                             CssClass="form-control"
                                             TextMode="Number"
                                             placeholder="120" />
+                                        <asp:RequiredFieldValidator ID="rfvDuration" runat="server" 
+                                            ControlToValidate="DURATIONTextBox" 
+                                            ValidationGroup="MovieInsert" 
+                                            ErrorMessage="Duration is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Duration is required" />
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -82,6 +101,13 @@
                                             Text='<%# Bind("LANGUAGE") %>' 
                                             CssClass="form-control"
                                             placeholder="English" />
+                                        <asp:RequiredFieldValidator ID="rfvLanguage" runat="server" 
+                                            ControlToValidate="LANGUAGETextBox" 
+                                            ValidationGroup="MovieInsert" 
+                                            ErrorMessage="Language is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Language is required" />
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -91,6 +117,13 @@
                                             Text='<%# Bind("GENRE") %>' 
                                             CssClass="form-control"
                                             placeholder="Action" />
+                                        <asp:RequiredFieldValidator ID="rfvGenre" runat="server" 
+                                            ControlToValidate="GENRETextBox" 
+                                            ValidationGroup="MovieInsert" 
+                                            ErrorMessage="Genre is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Genre is required" />
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label fw-bold" style="color: var(--bottle-green);">
@@ -100,11 +133,19 @@
                                             Text='<%# Bind("RELEASE_DATE") %>' 
                                             CssClass="form-control"
                                             TextMode="Date" />
+                                        <asp:RequiredFieldValidator ID="rfvReleaseDate" runat="server" 
+                                            ControlToValidate="RELEASE_DATETextBox" 
+                                            ValidationGroup="MovieInsert" 
+                                            ErrorMessage="Release Date is required" 
+                                            Display="Dynamic" 
+                                            CssClass="text-danger small" 
+                                            Text="* Release Date is required" />
                                     </div>
                                     <div class="col-12">
                                         <asp:LinkButton ID="InsertButton" runat="server" 
                                             CausesValidation="True" 
                                             CommandName="Insert" 
+                                            ValidationGroup="MovieInsert" 
                                             CssClass="btn btn-emerald">
                                             <i class="fas fa-save me-2"></i>Save Movie
                                         </asp:LinkButton>

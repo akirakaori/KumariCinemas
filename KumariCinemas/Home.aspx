@@ -1,6 +1,7 @@
 <%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="KumariCinemas.Home" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <meta http-equiv="refresh" content="30" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -34,20 +35,6 @@
 
         <!-- Dashboard Summary Cards -->
         <div class="row g-4 mb-4">
-            <!-- Data Source Info Banner -->
-            <div class="col-12">
-                <div class="alert alert-info d-flex justify-content-between align-items-center mb-3" role="alert">
-                    <div>
-                        <i class="fas fa-database me-2"></i>
-                        <strong>Live Database Connection:</strong> All statistics below are retrieved in real-time from the Oracle database.
-                        <asp:Label ID="lblLastUpdated" runat="server" CssClass="ms-3 text-muted small"></asp:Label>
-                    </div>
-                    <asp:LinkButton ID="btnRefresh" runat="server" CssClass="btn btn-sm btn-outline-primary" OnClick="btnRefresh_Click">
-                        <i class="fas fa-sync-alt me-1"></i> Refresh Data
-                    </asp:LinkButton>
-                </div>
-            </div>
-
             <!-- Total Customers Card -->
             <div class="col-xl-3 col-md-6">
                 <div class="card stat-card shadow-sm rounded border-0" title="Query: SELECT COUNT(*) FROM CUSTOMER">

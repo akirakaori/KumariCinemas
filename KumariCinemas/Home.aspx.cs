@@ -11,19 +11,7 @@ namespace KumariCinemas
             if (!IsPostBack)
             {
                 LoadDashboardStats();
-                UpdateLastRefreshedTime();
             }
-        }
-
-        protected void btnRefresh_Click(object sender, EventArgs e)
-        {
-            LoadDashboardStats();
-            UpdateLastRefreshedTime();
-        }
-
-        private void UpdateLastRefreshedTime()
-        {
-            lblLastUpdated.Text = $"Last updated: {DateTime.Now:MMM dd, yyyy hh:mm:ss tt}";
         }
 
         private void LoadDashboardStats()
