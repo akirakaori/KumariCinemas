@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Top Theatre Occupancy Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TopTheatreOccupancy.aspx.cs" Inherits="KumariCinemas.TopTheatreOccupancy" %>
+﻿<%@ Page Title="Top Theatre Occupancy Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TopTheatreOccupancy.aspx.cs" Inherits="KumariCinemas.TopTheatreOccupancy" MaintainScrollPositionOnPostBack="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

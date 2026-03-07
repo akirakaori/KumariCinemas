@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Theatre Movie Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TheatreMovie.aspx.cs" Inherits="KumariCinemas.TheatreMovie" %>
+﻿<%@ Page Title="Theatre Movie Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TheatreMovie.aspx.cs" Inherits="KumariCinemas.TheatreMovie" MaintainScrollPositionOnPostBack="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
