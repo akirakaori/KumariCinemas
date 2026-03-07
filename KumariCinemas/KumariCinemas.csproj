@@ -237,6 +237,14 @@
     <Content Include="LAYOUT_GUIDE.md" />
     <Content Include="LIVE_DATA_VERIFICATION.md" />
     <Content Include="DATA_VERIFICATION_SUMMARY.md" />
+    <Content Include="ALL_PAGES_PARSER_FIX_SUMMARY.md" />
+    <Content Include="BUTTON_INNER_HTML_FIX.md" />
+    <Content Include="DESIGNER_TYPE_MISMATCH_FIX.md" />
+    <Content Include="GRIDVIEW_HEADER_WHITE_TEXT_FIX.md" />
+    <Content Include="GRIDVIEW_SCROLL_POSITION_FIX.md" />
+    <Content Include="GRIDVIEW_COLUMN_HEADER_FIX.md" />
+    <Content Include="GRIDVIEW_DATABASE_ALIGNMENT_FIX.md" />
+    <Content Include="CUSTOMER_DATA_MISMATCH_FIX.md" />
     <None Include="Oracle.DataAccess.Common.Configuration.Section.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -254,6 +262,10 @@
     <Content Include="README_LAYOUT.md" />
     <Content Include="QUICK_START.md" />
     <Content Include="TROUBLESHOOTING.md" />
+    <Content Include="PARSER_ERROR_FIX.md" />
+    <Content Include="SCROLL_FIX_SUMMARY.md" />
+    <Content Include="SCROLL_FIX_QUICK_REFERENCE.md" />
+    <Content Include="SCROLL_FIX_STATUS.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

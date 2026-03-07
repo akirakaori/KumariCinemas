@@ -37,14 +37,13 @@
                         </asp:DropDownList>
                     </div>
                     <div class="col-md-4">
-                        <asp:Button
+                        <asp:LinkButton
                             ID="btnSearch"
                             runat="server"
-                            Text="Generate Report"
                             CssClass="btn btn-emerald w-100"
                             OnClick="btnSearch_Click">
-                            <i class="fas fa-search me-2"></i>
-                        </asp:Button>
+                            <i class="fas fa-search me-2"></i>Generate Report
+                        </asp:LinkButton>
                     </div>
                 </div>
                 <asp:Label

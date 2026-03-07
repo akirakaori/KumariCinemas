@@ -58,7 +58,7 @@
                                             <i class="fas fa-tag me-1"></i>Seat Number
                                         </label>
                                         <asp:TextBox ID="SEAT_NUMBERTextBox" runat="server" 
-                                            Text=''<%# Bind("SEAT_NUMBER") %>'' 
+                                            Text='<%# Bind("SEAT_NUMBER") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. B-12" />
                                     </div>
@@ -67,7 +67,7 @@
                                             <i class="fas fa-money-bill-wave me-1"></i>Ticket Price
                                         </label>
                                         <asp:TextBox ID="TICKET_PRICETextBox" runat="server" 
-                                            Text=''<%# Bind("TICKET_PRICE") %>'' 
+                                            Text='<%# Bind("TICKET_PRICE") %>' 
                                             CssClass="form-control"
                                             TextMode="Number"
                                             step="0.01"
@@ -78,7 +78,7 @@
                                             <i class="fas fa-calendar me-1"></i>Booking Date
                                         </label>
                                         <asp:TextBox ID="BOOKING_DATETextBox" runat="server" 
-                                            Text=''<%# Bind("BOOKING_DATE") %>'' 
+                                            Text='<%# Bind("BOOKING_DATE") %>' 
                                             CssClass="form-control"
                                             TextMode="Date" />
                                     </div>
@@ -87,7 +87,7 @@
                                             <i class="fas fa-info-circle me-1"></i>Ticket Status
                                         </label>
                                         <asp:TextBox ID="STATUSTextBox" runat="server" 
-                                            Text=''<%# Bind("STATUS") %>'' 
+                                            Text='<%# Bind("STATUS") %>' 
                                             CssClass="form-control"
                                             placeholder="All Statuses" />
                                     </div>
@@ -139,10 +139,10 @@
                                 PagerStyle-CssClass="gridview-pager">
                                 <Columns>
                                     <asp:BoundField DataField="TICKET_ID" HeaderText="Ticket ID" ReadOnly="True" SortExpression="TICKET_ID" ItemStyle-Width="90px" />
+                                    <asp:BoundField DataField="TICKET_PRICE" HeaderText="Ticket Price" SortExpression="TICKET_PRICE" DataFormatString="{0:C}" />
                                     <asp:BoundField DataField="BOOKING_DATE" HeaderText="Booking Date" SortExpression="BOOKING_DATE" DataFormatString="{0:yyyy-MM-dd}" />
-                                    <asp:BoundField DataField="SEAT_NUMBER" HeaderText="Hall" SortExpression="SEAT_NUMBER" />
-                                    <asp:BoundField DataField="TICKET_PRICE" HeaderText="Seat" SortExpression="TICKET_PRICE" DataFormatString="{0:C}" />
-                                    <asp:BoundField DataField="STATUS" HeaderText="Price" SortExpression="STATUS" />
+                                    <asp:BoundField DataField="STATUS" HeaderText="Status" SortExpression="STATUS" />
+                                    <asp:BoundField DataField="SEAT_NUMBER" HeaderText="Seat Number" SortExpression="SEAT_NUMBER" />
                                     <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
                                 </Columns>
                             </asp:GridView>

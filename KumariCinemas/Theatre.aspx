@@ -56,7 +56,7 @@
                                             <i class="fas fa-landmark me-1"></i>Theatre Name
                                         </label>
                                         <asp:TextBox ID="THEATRE_NAMETextBox" runat="server" 
-                                            Text=''<%# Bind("THEATRE_NAME") %>'' 
+                                            Text='<%# Bind("THEATRE_NAME") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. Kumari Grand" />
                                     </div>
@@ -65,7 +65,7 @@
                                             <i class="fas fa-map-marked-alt me-1"></i>Location / City
                                         </label>
                                         <asp:TextBox ID="THEATRE_CITY_HALLTextBox" runat="server" 
-                                            Text=''<%# Bind("THEATRE_CITY_HALL") %>'' 
+                                            Text='<%# Bind("THEATRE_CITY_HALL") %>' 
                                             CssClass="form-control"
                                             placeholder="Colombo 03" />
                                     </div>
@@ -74,7 +74,7 @@
                                             <i class="fas fa-location-arrow me-1"></i>Full Address
                                         </label>
                                         <asp:TextBox ID="THEATRE_LOCATIONTextBox" runat="server" 
-                                            Text=''<%# Bind("THEATRE_LOCATION") %>'' 
+                                            Text='<%# Bind("THEATRE_LOCATION") %>' 
                                             CssClass="form-control"
                                             placeholder="Detailed physical address..." />
                                     </div>
@@ -125,10 +125,10 @@
                                 GridLines="None"
                                 PagerStyle-CssClass="gridview-pager">
                                 <Columns>
-                                    <asp:BoundField DataField="THEATRE_ID" HeaderText="ID" ReadOnly="True" SortExpression="THEATRE_ID" ItemStyle-Width="70px" />
+                                    <asp:BoundField DataField="THEATRE_ID" HeaderText="Theatre ID" ReadOnly="True" SortExpression="THEATRE_ID" ItemStyle-Width="90px" />
                                     <asp:BoundField DataField="THEATRE_NAME" HeaderText="Theatre Name" SortExpression="THEATRE_NAME" />
-                                    <asp:BoundField DataField="THEATRE_CITY_HALL" HeaderText="Location" SortExpression="THEATRE_CITY_HALL" />
-                                    <asp:BoundField DataField="THEATRE_LOCATION" HeaderText="Contact" SortExpression="THEATRE_LOCATION" />
+                                    <asp:BoundField DataField="THEATRE_CITY_HALL" HeaderText="City/Hall" SortExpression="THEATRE_CITY_HALL" />
+                                    <asp:BoundField DataField="THEATRE_LOCATION" HeaderText="Location" SortExpression="THEATRE_LOCATION" />
                                     <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
                                 </Columns>
                             </asp:GridView>

@@ -567,14 +567,26 @@ table.gridview {
 
 table.gridview th {
     background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-dark));
-    color: white;
-    font-weight: 600;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
     text-align: left;
     padding: 1rem;
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
     border: none;
+}
+
+/* GridView Header Links (for sortable columns) */
+table.gridview th a {
+    color: #FFFFFF !important;
+    text-decoration: none;
+    font-weight: 700 !important;
+}
+
+table.gridview th a:hover {
+    color: #FFFFFF !important;
+    text-decoration: underline;
 }
 
 table.gridview td {
@@ -591,14 +603,15 @@ table.gridview tr:last-child td {
     border-bottom: none;
 }
 
-table.gridview a {
+/* GridView Links in Data Cells (Edit/Delete buttons) */
+table.gridview td a {
     color: var(--emerald-primary);
     text-decoration: none;
     font-weight: 500;
     margin-right: 0.75rem;
 }
 
-table.gridview a:hover {
+table.gridview td a:hover {
     color: var(--emerald-dark);
     text-decoration: underline;
 }

@@ -60,7 +60,7 @@
                                             <i class="fas fa-heading me-1"></i>Movie Title
                                         </label>
                                         <asp:TextBox ID="TITLETextBox" runat="server" 
-                                            Text=''<%# Bind("TITLE") %>'' 
+                                            Text='<%# Bind("TITLE") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. Inception" />
                                     </div>
@@ -69,7 +69,7 @@
                                             <i class="fas fa-clock me-1"></i>Duration (Min)
                                         </label>
                                         <asp:TextBox ID="DURATIONTextBox" runat="server" 
-                                            Text=''<%# Bind("DURATION") %>'' 
+                                            Text='<%# Bind("DURATION") %>' 
                                             CssClass="form-control"
                                             TextMode="Number"
                                             placeholder="120" />
@@ -79,7 +79,7 @@
                                             <i class="fas fa-language me-1"></i>Language
                                         </label>
                                         <asp:TextBox ID="LANGUAGETextBox" runat="server" 
-                                            Text=''<%# Bind("LANGUAGE") %>'' 
+                                            Text='<%# Bind("LANGUAGE") %>' 
                                             CssClass="form-control"
                                             placeholder="English" />
                                     </div>
@@ -88,7 +88,7 @@
                                             <i class="fas fa-theater-masks me-1"></i>Genre
                                         </label>
                                         <asp:TextBox ID="GENRETextBox" runat="server" 
-                                            Text=''<%# Bind("GENRE") %>'' 
+                                            Text='<%# Bind("GENRE") %>' 
                                             CssClass="form-control"
                                             placeholder="Action" />
                                     </div>
@@ -97,7 +97,7 @@
                                             <i class="fas fa-calendar me-1"></i>Release Date
                                         </label>
                                         <asp:TextBox ID="RELEASE_DATETextBox" runat="server" 
-                                            Text=''<%# Bind("RELEASE_DATE") %>'' 
+                                            Text='<%# Bind("RELEASE_DATE") %>' 
                                             CssClass="form-control"
                                             TextMode="Date" />
                                     </div>
@@ -148,12 +148,12 @@
                                 GridLines="None"
                                 PagerStyle-CssClass="gridview-pager">
                                 <Columns>
-                                    <asp:BoundField DataField="MOVIE_ID" HeaderText="ID" ReadOnly="True" SortExpression="MOVIE_ID" ItemStyle-Width="70px" />
+                                    <asp:BoundField DataField="MOVIE_ID" HeaderText="Movie ID" ReadOnly="True" SortExpression="MOVIE_ID" ItemStyle-Width="80px" />
                                     <asp:BoundField DataField="TITLE" HeaderText="Title" SortExpression="TITLE" />
                                     <asp:BoundField DataField="GENRE" HeaderText="Genre" SortExpression="GENRE" ItemStyle-Width="120px" />
-                                    <asp:BoundField DataField="LANGUAGE" HeaderText="Lang" SortExpression="LANGUAGE" ItemStyle-Width="100px" />
-                                    <asp:BoundField DataField="DURATION" HeaderText="Dur" SortExpression="DURATION" ItemStyle-Width="80px" />
-                                    <asp:BoundField DataField="RELEASE_DATE" HeaderText="Rating" SortExpression="RELEASE_DATE" DataFormatString="{0:yyyy-MM-dd}" ItemStyle-Width="110px" />
+                                    <asp:BoundField DataField="LANGUAGE" HeaderText="Language" SortExpression="LANGUAGE" ItemStyle-Width="100px" />
+                                    <asp:BoundField DataField="DURATION" HeaderText="Duration (min)" SortExpression="DURATION" ItemStyle-Width="120px" />
+                                    <asp:BoundField DataField="RELEASE_DATE" HeaderText="Release Date" SortExpression="RELEASE_DATE" DataFormatString="{0:yyyy-MM-dd}" ItemStyle-Width="120px" />
                                     <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
                                 </Columns>
                             </asp:GridView>

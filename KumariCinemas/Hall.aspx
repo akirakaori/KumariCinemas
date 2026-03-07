@@ -56,7 +56,7 @@
                                             <i class="fas fa-tag me-1"></i>Hall Name / Number
                                         </label>
                                         <asp:TextBox ID="HALL_NAMETextBox" runat="server" 
-                                            Text=''<%# Bind("HALL_NAME") %>'' 
+                                            Text='<%# Bind("HALL_NAME") %>' 
                                             CssClass="form-control"
                                             placeholder="e.g. Screen 01 or IMAX Hall" />
                                     </div>
@@ -65,7 +65,7 @@
                                             <i class="fas fa-certificate me-1"></i>Hall Category
                                         </label>
                                         <asp:TextBox ID="HALL_TYPETextBox" runat="server" 
-                                            Text=''<%# Bind("HALL_TYPE") %>'' 
+                                            Text='<%# Bind("HALL_TYPE") %>' 
                                             CssClass="form-control"
                                             placeholder="Select Hall Type" />
                                     </div>
@@ -74,7 +74,7 @@
                                             <i class="fas fa-users me-1"></i>Seating Capacity
                                         </label>
                                         <asp:TextBox ID="HALL_CAPACITYTextBox" runat="server" 
-                                            Text=''<%# Bind("HALL_CAPACITY") %>'' 
+                                            Text='<%# Bind("HALL_CAPACITY") %>' 
                                             CssClass="form-control"
                                             TextMode="Number"
                                             placeholder="Total seats" />
@@ -126,10 +126,10 @@
                                 GridLines="None"
                                 PagerStyle-CssClass="gridview-pager">
                                 <Columns>
-                                    <asp:BoundField DataField="HALL_ID" HeaderText="ID" ReadOnly="True" SortExpression="HALL_ID" ItemStyle-Width="70px" />
+                                    <asp:BoundField DataField="HALL_ID" HeaderText="Hall ID" ReadOnly="True" SortExpression="HALL_ID" ItemStyle-Width="80px" />
+                                    <asp:BoundField DataField="HALL_CAPACITY" HeaderText="Hall Capacity" SortExpression="HALL_CAPACITY" ItemStyle-Width="120px" />
                                     <asp:BoundField DataField="HALL_NAME" HeaderText="Hall Name" SortExpression="HALL_NAME" />
-                                    <asp:BoundField DataField="HALL_TYPE" HeaderText="Type" SortExpression="HALL_TYPE" />
-                                    <asp:BoundField DataField="HALL_CAPACITY" HeaderText="Capacity" SortExpression="HALL_CAPACITY" ItemStyle-Width="100px" />
+                                    <asp:BoundField DataField="HALL_TYPE" HeaderText="Hall Type" SortExpression="HALL_TYPE" />
                                     <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
                                 </Columns>
                             </asp:GridView>

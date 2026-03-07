@@ -35,12 +35,11 @@
                         </asp:DropDownList>
                     </div>
                     <div class="col-md-4">
-                        <asp:Button ID="btnSearch" runat="server"
-                            Text="Generate Report"
+                        <asp:LinkButton ID="btnSearch" runat="server"
                             CssClass="btn btn-emerald w-100"
                             OnClick="btnSearch_Click">
-                            <i class="fas fa-chart-bar me-2"></i>
-                        </asp:Button>
+                            <i class="fas fa-chart-bar me-2"></i>Generate Report
+                        </asp:LinkButton>
                     </div>
                 </div>
                 <asp:Label ID="lblMessage" runat="server" CssClass="text-danger mt-2 d-block"></asp:Label>

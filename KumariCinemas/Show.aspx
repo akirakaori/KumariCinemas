@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Show Management" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Show.aspx.cs" Inherits="KumariCinemas.Show" %>
+﻿<%@ Page Title="Show Management" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Show.aspx.cs" Inherits="KumariCinemas.Show" MaintainScrollPositionOnPostBack="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -56,7 +56,7 @@
                                             <i class="fas fa-calendar me-1"></i>Show Date
                                         </label>
                                         <asp:TextBox ID="SHOW_DATETextBox" runat="server" 
-                                            Text=''<%# Bind("SHOW_DATE") %>'' 
+                                            Text='<%# Bind("SHOW_DATE") %>' 
                                             CssClass="form-control"
                                             TextMode="Date" />
                                     </div>
@@ -65,7 +65,7 @@
                                             <i class="fas fa-clock me-1"></i>Show Time
                                         </label>
                                         <asp:TextBox ID="SHOW_TIMETextBox" runat="server" 
-                                            Text=''<%# Bind("SHOW_TIME") %>'' 
+                                            Text='<%# Bind("SHOW_TIME") %>' 
                                             CssClass="form-control"
                                             placeholder="18:30" />
                                     </div>
@@ -74,7 +74,7 @@
                                             <i class="fas fa-tag me-1"></i>Show Status
                                         </label>
                                         <asp:TextBox ID="SHOW_TYPETextBox" runat="server" 
-                                            Text=''<%# Bind("SHOW_TYPE") %>'' 
+                                            Text='<%# Bind("SHOW_TYPE") %>' 
                                             CssClass="form-control"
                                             placeholder="Upcoming" />
                                     </div>
@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- Current Show Schedules Card -->
-                <div class="crud-card">
+                <div class="crud-card" id="gridSection">
                     <div class="crud-card-header">
                         <h3 class="card-header-title mb-0">
                             <i class="fas fa-film me-2"></i>Current Show Schedules
@@ -123,12 +123,18 @@
                                 DataSourceID="SqlDataSource1"
                                 CssClass="gridview"
                                 GridLines="None"
-                                PagerStyle-CssClass="gridview-pager">
+                                PagerStyle-CssClass="gridview-pager"
+                                OnPageIndexChanging="GridView1_PageIndexChanging"
+                                OnSorting="GridView1_Sorting"
+                                OnRowEditing="GridView1_RowEditing"
+                                OnRowUpdating="GridView1_RowUpdating"
+                                OnRowCancelingEdit="GridView1_RowCancelingEdit"
+                                OnRowDeleting="GridView1_RowDeleting">
                                 <Columns>
-                                    <asp:BoundField DataField="SHOW_ID" HeaderText="ID" ReadOnly="True" SortExpression="SHOW_ID" ItemStyle-Width="70px" />
-                                    <asp:BoundField DataField="SHOW_DATE" HeaderText="Date / Time" SortExpression="SHOW_DATE" DataFormatString="{0:yyyy-MM-dd}" />
-                                    <asp:BoundField DataField="SHOW_TIME" HeaderText="Theatre & Hall" SortExpression="SHOW_TIME" />
-                                    <asp:BoundField DataField="SHOW_TYPE" HeaderText="Price" SortExpression="SHOW_TYPE" />
+                                    <asp:BoundField DataField="SHOW_ID" HeaderText="Show ID" ReadOnly="True" SortExpression="SHOW_ID" ItemStyle-Width="80px" />
+                                    <asp:BoundField DataField="SHOW_DATE" HeaderText="Show Date" SortExpression="SHOW_DATE" DataFormatString="{0:yyyy-MM-dd}" />
+                                    <asp:BoundField DataField="SHOW_TIME" HeaderText="Show Time" SortExpression="SHOW_TIME" />
+                                    <asp:BoundField DataField="SHOW_TYPE" HeaderText="Show Type" SortExpression="SHOW_TYPE" />
                                     <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
                                 </Columns>
                             </asp:GridView>
