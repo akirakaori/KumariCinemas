@@ -1,90 +1,86 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CustomerTicket.aspx.cs" Inherits="KumariCinemas.CustomerTicket" %>
+﻿<%@ Page Title="Customer Ticket Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CustomerTicket.aspx.cs" Inherits="KumariCinemas.CustomerTicket" %>
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Customer Ticket Report</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-        }
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
 
-        h2 {
-            color: #333333;
-        }
-
-        .form-section {
-            margin-bottom: 20px;
-        }
-
-        .label {
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .dropdown {
-            padding: 5px;
-            width: 220px;
-        }
-
-        .button {
-            padding: 6px 14px;
-            margin-left: 10px;
-        }
-
-        .grid {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <form id="form1" runat="server">
-
-        <h2>Customer Ticket Report (Last 6 Months)</h2>
-
-        <div class="form-section">
-            <span class="label">Select Customer:</span>
-
-            <asp:DropDownList ID="ddlCustomer" runat="server"
-                CssClass="dropdown"
-                DataSourceID="CustomerSource"
-                DataTextField="CUSTOMER_NAME"
-                DataValueField="CUSTOMER_ID"
-                AppendDataBoundItems="True">
-                <asp:ListItem Text="-- Select Customer --" Value="" />
-            </asp:DropDownList>
-
-            <asp:Button ID="btnSearch" runat="server"
-                Text="Search Tickets"
-                CssClass="button"
-                OnClick="btnSearch_Click" />
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid px-4 py-4">
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <h1 class="page-title">Customer Ticket Report</h1>
+            <p class="page-subtitle">View and analyze detailed customer booking history and ticket performance.</p>
         </div>
 
-        <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
+        <!-- Filter Section Card -->
+        <div class="filter-card mb-4">
+            <div class="filter-card-header">
+                <h3 class="card-header-title mb-0">
+                    <i class="fas fa-filter me-2"></i>Report Filters
+                </h3>
+            </div>
+            <div class="filter-card-body">
+                <div class="row align-items-end">
+                    <div class="col-md-8 mb-3 mb-md-0">
+                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                            <i class="fas fa-user me-1"></i>Customer Name
+                        </label>
+                        <asp:DropDownList ID="ddlCustomer" runat="server"
+                            CssClass="form-select"
+                            DataSourceID="CustomerSource"
+                            DataTextField="CUSTOMER_NAME"
+                            DataValueField="CUSTOMER_ID"
+                            AppendDataBoundItems="True">
+                            <asp:ListItem Text="-- Select Customer --" Value="" />
+                        </asp:DropDownList>
+                    </div>
+                    <div class="col-md-4">
+                        <asp:Button ID="btnSearch" runat="server"
+                            Text="Generate Report"
+                            CssClass="btn btn-emerald w-100"
+                            OnClick="btnSearch_Click">
+                            <i class="fas fa-chart-bar me-2"></i>
+                        </asp:Button>
+                    </div>
+                </div>
+                <asp:Label ID="lblMessage" runat="server" CssClass="text-danger mt-2 d-block"></asp:Label>
+            </div>
+        </div>
 
-        <asp:GridView ID="GridView1" runat="server"
-            CssClass="grid"
-            AutoGenerateColumns="False"
-            AllowPaging="True"
-            AllowSorting="True"
-            PageSize="5"
-            EmptyDataText="No ticket history found for the selected customer in the last 6 months."
-            DataSourceID="TicketSource"
-            GridLines="Both"
-            CellPadding="8">
-
-            <Columns>
-                <asp:BoundField DataField="CUSTOMER_NAME" HeaderText="Customer Name" SortExpression="CUSTOMER_NAME" />
-                <asp:BoundField DataField="TICKET_ID" HeaderText="Ticket ID" SortExpression="TICKET_ID" />
-                <asp:BoundField DataField="TITLE" HeaderText="Movie Title" SortExpression="TITLE" />
-                <asp:BoundField DataField="SHOW_DATE" HeaderText="Show Date" DataFormatString="{0:dd-MMM-yyyy}" SortExpression="SHOW_DATE" />
-                <asp:BoundField DataField="SHOW_TIME" HeaderText="Show Time" SortExpression="SHOW_TIME" />
-                <asp:BoundField DataField="SEAT_NUMBER" HeaderText="Seat Number" SortExpression="SEAT_NUMBER" />
-                <asp:BoundField DataField="TICKET_PRICE" HeaderText="Ticket Price" DataFormatString="{0:N2}" SortExpression="TICKET_PRICE" />
-                <asp:BoundField DataField="STATUS" HeaderText="Status" SortExpression="STATUS" />
-            </Columns>
-        </asp:GridView>
+        <!-- Report Results Card -->
+        <div class="crud-card">
+            <div class="crud-card-header">
+                <h3 class="card-header-title mb-0">
+                    <i class="fas fa-receipt me-2"></i>Booking Details
+                </h3>
+                <small class="text-muted">9 Records Found</small>
+            </div>
+            <div class="crud-card-body p-0">
+                <div class="table-container">
+                    <asp:GridView ID="GridView1" runat="server"
+                        AutoGenerateColumns="False"
+                        AllowPaging="True"
+                        AllowSorting="True"
+                        PageSize="5"
+                        EmptyDataText="No ticket history found for the selected customer in the last 6 months."
+                        DataSourceID="TicketSource"
+                        CssClass="gridview"
+                        GridLines="None"
+                        PagerStyle-CssClass="gridview-pager">
+                        <Columns>
+                            <asp:BoundField DataField="TICKET_ID" HeaderText="Ticket ID" SortExpression="TICKET_ID" ItemStyle-Width="90px" />
+                            <asp:BoundField DataField="CUSTOMER_NAME" HeaderText="Customer" SortExpression="CUSTOMER_NAME" />
+                            <asp:BoundField DataField="TITLE" HeaderText="Movie Name" SortExpression="TITLE" />
+                            <asp:BoundField DataField="SHOW_DATE" HeaderText="Theatre / Hall" DataFormatString="{0:dd-MMM-yyyy}" SortExpression="SHOW_DATE" />
+                            <asp:BoundField DataField="SHOW_TIME" HeaderText="Seat" SortExpression="SHOW_TIME" />
+                            <asp:BoundField DataField="SEAT_NUMBER" HeaderText="Ticket ID" SortExpression="SEAT_NUMBER" />
+                            <asp:BoundField DataField="TICKET_PRICE" HeaderText="Amount" DataFormatString="{0:N2}" SortExpression="TICKET_PRICE" />
+                            <asp:BoundField DataField="STATUS" HeaderText="Status" SortExpression="STATUS" />
+                        </Columns>
+                    </asp:GridView>
+                </div>
+            </div>
+        </div>
 
         <!-- Customer Dropdown Source -->
         <asp:SqlDataSource ID="CustomerSource" runat="server"
@@ -114,7 +110,6 @@
                 WHERE C.CUSTOMER_ID = :CUSTOMER_ID
                   AND T.BOOKING_DATE >= ADD_MONTHS(SYSDATE, -6)
                 ORDER BY S.SHOW_DATE DESC">
-
             <SelectParameters>
                 <asp:ControlParameter
                     Name="CUSTOMER_ID"
@@ -124,6 +119,5 @@
             </SelectParameters>
         </asp:SqlDataSource>
 
-    </form>
-</body>
-</html>
+    </div>
+</asp:Content>

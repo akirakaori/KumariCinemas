@@ -1,14 +1,18 @@
+﻿<%@ Page Title="Customer Management" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Customer.aspx.cs" Inherits="KumariCinemas.Customer" %>
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Customer.aspx.cs" Inherits="KumariCinemas.Customer" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
 
-<!DOCTYPE html>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid px-4 py-4">
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <h1 class="page-title">Customer Details</h1>
+            <p class="page-subtitle">Maintain and audit customer information, booking history, and membership records for the cinema booking system.</p>
+        </div>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Customer Management</title>
-</head>
-<body>
-    <form id="form1" runat="server">
+        <!-- Data Sources -->
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
             ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
@@ -34,59 +38,118 @@
             </UpdateParameters>
         </asp:SqlDataSource>
 
-        <div>
-            <h2>Customer Information</h2>
-            <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="CUSTOMER_ID" DataSourceID="SqlDataSource1">
-                <Columns>
-                    <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
-                    <asp:BoundField DataField="CUSTOMER_ID" HeaderText="CUSTOMER_ID" ReadOnly="True" SortExpression="CUSTOMER_ID" />
-                    <asp:BoundField DataField="CUSTOMER_NAME" HeaderText="CUSTOMER_NAME" SortExpression="CUSTOMER_NAME" />
-                    <asp:BoundField DataField="ADDRESS" HeaderText="ADDRESS" SortExpression="ADDRESS" />
-                    <asp:BoundField DataField="EMAIL" HeaderText="EMAIL" SortExpression="EMAIL" />
-                    <asp:BoundField DataField="CONTACT_NUMBER" HeaderText="CONTACT_NUMBER" SortExpression="CONTACT_NUMBER" />
-                </Columns>
-            </asp:GridView>
-            
-            <hr />
-            <h2>Add New Customer</h2>
-            <asp:FormView ID="FormView1" runat="server" DataKeyNames="CUSTOMER_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
-                <InsertItemTemplate>
-                    CUSTOMER_NAME:
-                    <asp:TextBox ID="CUSTOMER_NAMETextBox" runat="server" Text='<%# Bind("CUSTOMER_NAME") %>' />
-                    <br />
-                    ADDRESS:
-                    <asp:TextBox ID="ADDRESSTextBox" runat="server" Text='<%# Bind("ADDRESS") %>' />
-                    <br />
-                    EMAIL:
-                    <asp:TextBox ID="EMAILTextBox" runat="server" Text='<%# Bind("EMAIL") %>' />
-                    <br />
-                    CONTACT_NUMBER:
-                    <asp:TextBox ID="CONTACT_NUMBERTextBox" runat="server" Text='<%# Bind("CONTACT_NUMBER") %>' />
-                    <br />
-                    <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Insert" />
-                    &nbsp;<asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
-                </InsertItemTemplate>
-                <ItemTemplate>
-                    CUSTOMER_ID:
-                    <asp:Label ID="CUSTOMER_IDLabel" runat="server" Text='<%# Eval("CUSTOMER_ID") %>' />
-                    <br />
-                    CUSTOMER_NAME:
-                    <asp:Label ID="CUSTOMER_NAMELabel" runat="server" Text='<%# Bind("CUSTOMER_NAME") %>' />
-                    <br />
-                    ADDRESS:
-                    <asp:Label ID="ADDRESSLabel" runat="server" Text='<%# Bind("ADDRESS") %>' />
-                    <br />
-                    EMAIL:
-                    <asp:Label ID="EMAILLabel" runat="server" Text='<%# Bind("EMAIL") %>' />
-                    <br />
-                    CONTACT_NUMBER:
-                    <asp:Label ID="CONTACT_NUMBERLabel" runat="server" Text='<%# Bind("CONTACT_NUMBER") %>' />
-                    <br />
-                    <asp:LinkButton ID="NewButton" runat="server" CausesValidation="False" CommandName="New" Text="New" />
-                </ItemTemplate>
-            </asp:FormView>
-        </div>
-    </form>
-</body>
-</html>
+        <div class="row">
+            <div class="col-12">
+                
+                <!-- Add New Customer Card -->
+                <div class="crud-card mb-4">
+                    <div class="crud-card-header">
+                        <h3 class="card-header-title mb-0">
+                            <i class="fas fa-user-plus me-2"></i>Customer Management
+                        </h3>
+                        <small class="text-muted">Enter customer details to register a new record or update existing ones.</small>
+                    </div>
+                    <div class="crud-card-body">
+                        <asp:FormView ID="FormView1" runat="server" DataKeyNames="CUSTOMER_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
+                            <InsertItemTemplate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-user me-1"></i>Full Name
+                                        </label>
+                                        <asp:TextBox ID="CUSTOMER_NAMETextBox" runat="server" 
+                                            Text=''<%# Bind("CUSTOMER_NAME") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="e.g. John Doe" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-envelope me-1"></i>Email Address
+                                        </label>
+                                        <asp:TextBox ID="EMAILTextBox" runat="server" 
+                                            Text=''<%# Bind("EMAIL") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="john@example.com" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-phone me-1"></i>Phone Number
+                                        </label>
+                                        <asp:TextBox ID="CONTACT_NUMBERTextBox" runat="server" 
+                                            Text=''<%# Bind("CONTACT_NUMBER") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="+94 XX XXX XXXX" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-map-marker-alt me-1"></i>Address
+                                        </label>
+                                        <asp:TextBox ID="ADDRESSTextBox" runat="server" 
+                                            Text=''<%# Bind("ADDRESS") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="Detailed physical address..." />
+                                    </div>
+                                    <div class="col-12">
+                                        <asp:LinkButton ID="InsertButton" runat="server" 
+                                            CausesValidation="True" 
+                                            CommandName="Insert" 
+                                            CssClass="btn btn-emerald">
+                                            <i class="fas fa-save me-2"></i>Save Record
+                                        </asp:LinkButton>
+                                        <asp:LinkButton ID="InsertCancelButton" runat="server" 
+                                            CausesValidation="False" 
+                                            CommandName="Cancel" 
+                                            CssClass="btn btn-outline-secondary ms-2">
+                                            <i class="fas fa-times me-2"></i>Reset Form
+                                        </asp:LinkButton>
+                                    </div>
+                                </div>
+                            </InsertItemTemplate>
+                            
+                            <ItemTemplate>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No records selected. Use the form above to add a new customer.
+                                </div>
+                            </ItemTemplate>
+                        </asp:FormView>
+                    </div>
+                </div>
 
+                <!-- Customer Directory Card -->
+                <div class="crud-card">
+                    <div class="crud-card-header">
+                        <h3 class="card-header-title mb-0">
+                            <i class="fas fa-users me-2"></i>Customer Directory
+                        </h3>
+                        <small class="text-muted">Complete list of registered customers across all branches.</small>
+                    </div>
+                    <div class="crud-card-body p-0">
+                        <div class="table-container">
+                            <asp:GridView ID="GridView1" runat="server" 
+                                AllowPaging="True" 
+                                AllowSorting="True" 
+                                AutoGenerateColumns="False" 
+                                DataKeyNames="CUSTOMER_ID" 
+                                DataSourceID="SqlDataSource1"
+                                CssClass="gridview"
+                                GridLines="None"
+                                PagerStyle-CssClass="gridview-pager">
+                                <Columns>
+                                    <asp:BoundField DataField="CUSTOMER_ID" HeaderText="ID" ReadOnly="True" SortExpression="CUSTOMER_ID" ItemStyle-Width="80px" />
+                                    <asp:BoundField DataField="CUSTOMER_NAME" HeaderText="Customer" SortExpression="CUSTOMER_NAME" />
+                                    <asp:BoundField DataField="EMAIL" HeaderText="Contact" SortExpression="EMAIL" />
+                                    <asp:BoundField DataField="CONTACT_NUMBER" HeaderText="Phone Number" SortExpression="CONTACT_NUMBER" />
+                                    <asp:BoundField DataField="ADDRESS" HeaderText="Address" SortExpression="ADDRESS" />
+                                    <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</asp:Content>

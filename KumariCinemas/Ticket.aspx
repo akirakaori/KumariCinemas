@@ -1,31 +1,24 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Ticket.aspx.cs" Inherits="KumariCinemas.Ticket" %>
+﻿<%@ Page Title="Ticket Management" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Ticket.aspx.cs" Inherits="KumariCinemas.Ticket" %>
 
-<!DOCTYPE html>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid px-4 py-4">
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <h1 class="page-title">Ticket Details</h1>
+            <p class="page-subtitle">Manage ticket booking information and records.</p>
         </div>
-        <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="TICKET_ID" DataSourceID="SqlDataSource1">
-            <Columns>
-                <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
-                <asp:BoundField DataField="TICKET_ID" HeaderText="TICKET_ID" ReadOnly="True" SortExpression="TICKET_ID" />
-                <asp:BoundField DataField="TICKET_PRICE" HeaderText="TICKET_PRICE" SortExpression="TICKET_PRICE" />
-                <asp:BoundField DataField="BOOKING_DATE" HeaderText="BOOKING_DATE" SortExpression="BOOKING_DATE" />
-                <asp:BoundField DataField="STATUS" HeaderText="STATUS" SortExpression="STATUS" />
-                <asp:BoundField DataField="SEAT_NUMBER" HeaderText="SEAT_NUMBER" SortExpression="SEAT_NUMBER" />
-            </Columns>
-        </asp:GridView>
+
+        <!-- Data Sources -->
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
             ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
-            SelectCommand="SELECT TICKET_ID, TICKET_PRICE, BOOKING_DATE, STATUS, SEAT_NUMBER FROM TICKET" 
-            InsertCommand="INSERT INTO TICKET (TICKET_ID, TICKET_PRICE, BOOKING_DATE, STATUS, SEAT_NUMBER) VALUES ((SELECT NVL(MAX(TICKET_ID), 0) + 1 FROM TICKET), :TICKET_PRICE, :BOOKING_DATE, :STATUS, :SEAT_NUMBER)" 
-            UpdateCommand="UPDATE TICKET SET TICKET_PRICE = :TICKET_PRICE, BOOKING_DATE = :BOOKING_DATE, STATUS = :STATUS, SEAT_NUMBER = :SEAT_NUMBER WHERE TICKET_ID = :TICKET_ID" 
+            SelectCommand="SELECT TICKET_ID, TICKET_PRICE, BOOKING_DATE, STATUS, SEAT_NUMBER FROM TICKET"
+            InsertCommand="INSERT INTO TICKET (TICKET_ID, TICKET_PRICE, BOOKING_DATE, STATUS, SEAT_NUMBER) VALUES ((SELECT NVL(MAX(TICKET_ID), 0) + 1 FROM TICKET), :TICKET_PRICE, :BOOKING_DATE, :STATUS, :SEAT_NUMBER)"
+            UpdateCommand="UPDATE TICKET SET TICKET_PRICE = :TICKET_PRICE, BOOKING_DATE = :BOOKING_DATE, STATUS = :STATUS, SEAT_NUMBER = :SEAT_NUMBER WHERE TICKET_ID = :TICKET_ID"
             DeleteCommand="DELETE FROM TICKET WHERE TICKET_ID = :TICKET_ID">
             <DeleteParameters>
                 <asp:Parameter Name="TICKET_ID" Type="Int32" />
@@ -44,29 +37,121 @@
                 <asp:Parameter Name="TICKET_ID" Type="Int32" />
             </UpdateParameters>
         </asp:SqlDataSource>
-        <asp:FormView ID="FormView1" runat="server" DataKeyNames="TICKET_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
 
-            <InsertItemTemplate>
-                TICKET_PRICE:
-                <asp:TextBox ID="TICKET_PRICETextBox" runat="server" Text='<%# Bind("TICKET_PRICE") %>' />
-                <br />
-                BOOKING_DATE:
-                <asp:TextBox ID="BOOKING_DATETextBox" runat="server" Text='<%# Bind("BOOKING_DATE") %>' />
-                <br />
-                STATUS:
-                <asp:TextBox ID="STATUSTextBox" runat="server" Text='<%# Bind("STATUS") %>' />
-                <br />
-                SEAT_NUMBER:
-                <asp:TextBox ID="SEAT_NUMBERTextBox" runat="server" Text='<%# Bind("SEAT_NUMBER") %>' />
-                <br />
-                <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Insert" />
-                &nbsp;<asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
-            </InsertItemTemplate>
-            <ItemTemplate>
+        <div class="row">
+            <div class="col-12">
                 
-                &nbsp;<asp:LinkButton ID="NewButton" runat="server" CausesValidation="False" CommandName="New" Text="New" />
-            </ItemTemplate>
-        </asp:FormView>
-    </form>
-</body>
-</html>
+                <!-- Ticket Entry Form Card -->
+                <div class="crud-card mb-4">
+                    <div class="crud-card-header">
+                        <h3 class="card-header-title mb-0">
+                            <i class="fas fa-ticket-alt me-2"></i>Ticket Entry Form
+                        </h3>
+                        <small class="text-muted">Create new booking or update existing ticket records.</small>
+                    </div>
+                    <div class="crud-card-body">
+                        <asp:FormView ID="FormView1" runat="server" DataKeyNames="TICKET_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
+                            <InsertItemTemplate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-tag me-1"></i>Seat Number
+                                        </label>
+                                        <asp:TextBox ID="SEAT_NUMBERTextBox" runat="server" 
+                                            Text=''<%# Bind("SEAT_NUMBER") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="e.g. B-12" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-money-bill-wave me-1"></i>Ticket Price
+                                        </label>
+                                        <asp:TextBox ID="TICKET_PRICETextBox" runat="server" 
+                                            Text=''<%# Bind("TICKET_PRICE") %>'' 
+                                            CssClass="form-control"
+                                            TextMode="Number"
+                                            step="0.01"
+                                            placeholder="0.00" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-calendar me-1"></i>Booking Date
+                                        </label>
+                                        <asp:TextBox ID="BOOKING_DATETextBox" runat="server" 
+                                            Text=''<%# Bind("BOOKING_DATE") %>'' 
+                                            CssClass="form-control"
+                                            TextMode="Date" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-info-circle me-1"></i>Ticket Status
+                                        </label>
+                                        <asp:TextBox ID="STATUSTextBox" runat="server" 
+                                            Text=''<%# Bind("STATUS") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="All Statuses" />
+                                    </div>
+                                    <div class="col-12">
+                                        <asp:LinkButton ID="InsertButton" runat="server" 
+                                            CausesValidation="True" 
+                                            CommandName="Insert" 
+                                            CssClass="btn btn-emerald">
+                                            <i class="fas fa-save me-2"></i>Save Record
+                                        </asp:LinkButton>
+                                        <asp:LinkButton ID="InsertCancelButton" runat="server" 
+                                            CausesValidation="False" 
+                                            CommandName="Cancel" 
+                                            CssClass="btn btn-outline-secondary ms-2">
+                                            <i class="fas fa-times me-2"></i>Clear Fields
+                                        </asp:LinkButton>
+                                    </div>
+                                </div>
+                            </InsertItemTemplate>
+                            
+                            <ItemTemplate>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No records selected. Use the form above to add a new ticket.
+                                </div>
+                            </ItemTemplate>
+                        </asp:FormView>
+                    </div>
+                </div>
+
+                <!-- Ticket Records History Card -->
+                <div class="crud-card">
+                    <div class="crud-card-header">
+                        <h3 class="card-header-title mb-0">
+                            <i class="fas fa-history me-2"></i>Ticket Records History
+                        </h3>
+                        <small class="text-muted">Search by Ticket ID or Customer name.</small>
+                    </div>
+                    <div class="crud-card-body p-0">
+                        <div class="table-container">
+                            <asp:GridView ID="GridView1" runat="server" 
+                                AllowPaging="True" 
+                                AllowSorting="True" 
+                                AutoGenerateColumns="False" 
+                                DataKeyNames="TICKET_ID" 
+                                DataSourceID="SqlDataSource1"
+                                CssClass="gridview"
+                                GridLines="None"
+                                PagerStyle-CssClass="gridview-pager">
+                                <Columns>
+                                    <asp:BoundField DataField="TICKET_ID" HeaderText="Ticket ID" ReadOnly="True" SortExpression="TICKET_ID" ItemStyle-Width="90px" />
+                                    <asp:BoundField DataField="BOOKING_DATE" HeaderText="Booking Date" SortExpression="BOOKING_DATE" DataFormatString="{0:yyyy-MM-dd}" />
+                                    <asp:BoundField DataField="SEAT_NUMBER" HeaderText="Hall" SortExpression="SEAT_NUMBER" />
+                                    <asp:BoundField DataField="TICKET_PRICE" HeaderText="Seat" SortExpression="TICKET_PRICE" DataFormatString="{0:C}" />
+                                    <asp:BoundField DataField="STATUS" HeaderText="Price" SortExpression="STATUS" />
+                                    <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</asp:Content>

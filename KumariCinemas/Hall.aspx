@@ -1,69 +1,144 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Hall.aspx.cs" Inherits="KumariCinemas.Hall" %>
+﻿<%@ Page Title="Hall Management" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Hall.aspx.cs" Inherits="KumariCinemas.Hall" %>
 
-<!DOCTYPE html>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-    <link href= "/content/bootstrap.min.css" rel="stylesheet"/>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
-            <asp:GridView ID="GridView1" CssClass="table" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="HALL_ID" DataSourceID="SqlDataSource1">
-                <Columns>
-                    <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" />
-                    <asp:BoundField DataField="HALL_ID" HeaderText="HALL_ID" ReadOnly="True" SortExpression="HALL_ID" />
-                    <asp:BoundField DataField="HALL_CAPACITY" HeaderText="HALL_CAPACITY" SortExpression="HALL_CAPACITY" />
-                    <asp:BoundField DataField="HALL_NAME" HeaderText="HALL_NAME" SortExpression="HALL_NAME" />
-                    <asp:BoundField DataField="HALL_TYPE" HeaderText="HALL_TYPE" SortExpression="HALL_TYPE" />
-                </Columns>
-            </asp:GridView>
-            <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-                ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
-                ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
-                SelectCommand="SELECT HALL_ID, HALL_CAPACITY, HALL_NAME, HALL_TYPE FROM HALL" 
-                InsertCommand="INSERT INTO HALL (HALL_ID, HALL_CAPACITY, HALL_NAME, HALL_TYPE) VALUES ((SELECT NVL(MAX(HALL_ID), 0) + 1 FROM HALL), :HALL_CAPACITY, :HALL_NAME, :HALL_TYPE)" 
-                UpdateCommand="UPDATE HALL SET HALL_CAPACITY = :HALL_CAPACITY, HALL_NAME = :HALL_NAME, HALL_TYPE = :HALL_TYPE WHERE HALL_ID = :HALL_ID" 
-                DeleteCommand="DELETE FROM HALL WHERE HALL_ID = :HALL_ID">
-                <DeleteParameters>
-                    <asp:Parameter Name="HALL_ID" Type="Int32" />
-                </DeleteParameters>
-                <InsertParameters>
-                    <asp:Parameter Name="HALL_CAPACITY" Type="Int32" />
-                    <asp:Parameter Name="HALL_NAME" Type="String" />
-                    <asp:Parameter Name="HALL_TYPE" Type="String" />
-                </InsertParameters>
-                <UpdateParameters>
-                    <asp:Parameter Name="HALL_CAPACITY" Type="Int32" />
-                    <asp:Parameter Name="HALL_NAME" Type="String" />
-                    <asp:Parameter Name="HALL_TYPE" Type="String" />
-                    <asp:Parameter Name="HALL_ID" Type="Int32" />
-                </UpdateParameters>
-            </asp:SqlDataSource>
-            <asp:FormView ID="FormView1" runat="server" DataKeyNames="HALL_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
-
-                <InsertItemTemplate>
-                    HALL_CAPACITY:
-                    <asp:TextBox ID="HALL_CAPACITYTextBox" runat="server" Text='<%# Bind("HALL_CAPACITY") %>' />
-                    <br />
-                    HALL_NAME:
-                    <asp:TextBox ID="HALL_NAMETextBox" runat="server" Text='<%# Bind("HALL_NAME") %>' />
-                    <br />
-                    HALL_TYPE:
-                    <asp:TextBox ID="HALL_TYPETextBox" runat="server" Text='<%# Bind("HALL_TYPE") %>' />
-                    <br />
-                    <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Insert" />
-                    &nbsp;<asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
-                </InsertItemTemplate>
-                <ItemTemplate>
-                    
-                    <br />
-                    
-                    &nbsp;<asp:LinkButton ID="NewButton" runat="server" CausesValidation="False" CommandName="New" Text="New" />
-                </ItemTemplate>
-            </asp:FormView>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid px-4 py-4">
+        
+        <!-- Page Header -->
+        <div class="mb-4">
+            <h1 class="page-title">Hall Details</h1>
+            <p class="page-subtitle">Configure and manage individual cinema screens, capacities, and technology across your theatre network.</p>
         </div>
-    </form>
-</body>
-</html>
+
+        <!-- Data Sources -->
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+            ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
+            ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
+            SelectCommand="SELECT HALL_ID, HALL_CAPACITY, HALL_NAME, HALL_TYPE FROM HALL"
+            InsertCommand="INSERT INTO HALL (HALL_ID, HALL_CAPACITY, HALL_NAME, HALL_TYPE) VALUES ((SELECT NVL(MAX(HALL_ID), 0) + 1 FROM HALL), :HALL_CAPACITY, :HALL_NAME, :HALL_TYPE)"
+            UpdateCommand="UPDATE HALL SET HALL_CAPACITY = :HALL_CAPACITY, HALL_NAME = :HALL_NAME, HALL_TYPE = :HALL_TYPE WHERE HALL_ID = :HALL_ID"
+            DeleteCommand="DELETE FROM HALL WHERE HALL_ID = :HALL_ID">
+            <DeleteParameters>
+                <asp:Parameter Name="HALL_ID" Type="Int32" />
+            </DeleteParameters>
+            <InsertParameters>
+                <asp:Parameter Name="HALL_CAPACITY" Type="Int32" />
+                <asp:Parameter Name="HALL_NAME" Type="String" />
+                <asp:Parameter Name="HALL_TYPE" Type="String" />
+            </InsertParameters>
+            <UpdateParameters>
+                <asp:Parameter Name="HALL_CAPACITY" Type="Int32" />
+                <asp:Parameter Name="HALL_NAME" Type="String" />
+                <asp:Parameter Name="HALL_TYPE" Type="String" />
+                <asp:Parameter Name="HALL_ID" Type="Int32" />
+            </UpdateParameters>
+        </asp:SqlDataSource>
+
+        <div class="row">
+            <div class="col-12">
+                
+                <!-- Hall Configuration Card -->
+                <div class="crud-card mb-4">
+                    <div class="crud-card-header">
+                        <h3 class="card-header-title mb-0">
+                            <i class="fas fa-door-open me-2"></i>Hall Configuration
+                        </h3>
+                        <small class="text-muted">Enter hall specifications and associate with a theatre location.</small>
+                    </div>
+                    <div class="crud-card-body">
+                        <asp:FormView ID="FormView1" runat="server" DataKeyNames="HALL_ID" DataSourceID="SqlDataSource1" DefaultMode="Insert">
+                            <InsertItemTemplate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-tag me-1"></i>Hall Name / Number
+                                        </label>
+                                        <asp:TextBox ID="HALL_NAMETextBox" runat="server" 
+                                            Text=''<%# Bind("HALL_NAME") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="e.g. Screen 01 or IMAX Hall" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-certificate me-1"></i>Hall Category
+                                        </label>
+                                        <asp:TextBox ID="HALL_TYPETextBox" runat="server" 
+                                            Text=''<%# Bind("HALL_TYPE") %>'' 
+                                            CssClass="form-control"
+                                            placeholder="Select Hall Type" />
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label fw-bold" style="color: var(--bottle-green);">
+                                            <i class="fas fa-users me-1"></i>Seating Capacity
+                                        </label>
+                                        <asp:TextBox ID="HALL_CAPACITYTextBox" runat="server" 
+                                            Text=''<%# Bind("HALL_CAPACITY") %>'' 
+                                            CssClass="form-control"
+                                            TextMode="Number"
+                                            placeholder="Total seats" />
+                                    </div>
+                                    <div class="col-12">
+                                        <asp:LinkButton ID="InsertButton" runat="server" 
+                                            CausesValidation="True" 
+                                            CommandName="Insert" 
+                                            CssClass="btn btn-emerald">
+                                            <i class="fas fa-plus-circle me-2"></i>Add Hall Record
+                                        </asp:LinkButton>
+                                        <asp:LinkButton ID="InsertCancelButton" runat="server" 
+                                            CausesValidation="False" 
+                                            CommandName="Cancel" 
+                                            CssClass="btn btn-outline-secondary ms-2">
+                                            <i class="fas fa-redo me-2"></i>Reset Form
+                                        </asp:LinkButton>
+                                    </div>
+                                </div>
+                            </InsertItemTemplate>
+                            
+                            <ItemTemplate>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No records selected. Use the form above to add a new hall.
+                                </div>
+                            </ItemTemplate>
+                        </asp:FormView>
+                    </div>
+                </div>
+
+                <!-- Existing Hall Records Card -->
+                <div class="crud-card">
+                    <div class="crud-card-header">
+                        <h3 class="card-header-title mb-0">
+                            <i class="fas fa-list me-2"></i>Existing Hall Records
+                        </h3>
+                        <small class="text-muted">View and manage all active cinema screens across the theatres.</small>
+                    </div>
+                    <div class="crud-card-body p-0">
+                        <div class="table-container">
+                            <asp:GridView ID="GridView1" runat="server" 
+                                AllowPaging="True" 
+                                AllowSorting="True" 
+                                AutoGenerateColumns="False" 
+                                DataKeyNames="HALL_ID" 
+                                DataSourceID="SqlDataSource1"
+                                CssClass="gridview"
+                                GridLines="None"
+                                PagerStyle-CssClass="gridview-pager">
+                                <Columns>
+                                    <asp:BoundField DataField="HALL_ID" HeaderText="ID" ReadOnly="True" SortExpression="HALL_ID" ItemStyle-Width="70px" />
+                                    <asp:BoundField DataField="HALL_NAME" HeaderText="Hall Name" SortExpression="HALL_NAME" />
+                                    <asp:BoundField DataField="HALL_TYPE" HeaderText="Type" SortExpression="HALL_TYPE" />
+                                    <asp:BoundField DataField="HALL_CAPACITY" HeaderText="Capacity" SortExpression="HALL_CAPACITY" ItemStyle-Width="100px" />
+                                    <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</asp:Content>

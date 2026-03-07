@@ -120,9 +120,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Customer.aspx" />
     <Content Include="CustomerTicket.aspx" />
+    <Content Include="Customer_MasterPageExample.aspx" />
     <Content Include="Hall.aspx" />
+    <Content Include="Home.aspx" />
     <Content Include="Movie.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -156,6 +159,13 @@
     <Compile Include="Hall.aspx.designer.cs">
       <DependentUpon>Hall.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Movie.aspx.cs">
       <DependentUpon>Movie.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -170,6 +180,13 @@
     </Compile>
     <Compile Include="Show.aspx.designer.cs">
       <DependentUpon>Show.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="Theatre.aspx.cs">
       <DependentUpon>Theatre.aspx</DependentUpon>
@@ -217,6 +234,9 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="LAYOUT_GUIDE.md" />
+    <Content Include="LIVE_DATA_VERIFICATION.md" />
+    <Content Include="DATA_VERIFICATION_SUMMARY.md" />
     <None Include="Oracle.DataAccess.Common.Configuration.Section.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -230,6 +250,10 @@
     <Content Include="Scripts\bootstrap.esm.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Site.Master" />
+    <Content Include="README_LAYOUT.md" />
+    <Content Include="QUICK_START.md" />
+    <Content Include="TROUBLESHOOTING.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

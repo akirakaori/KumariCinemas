@@ -1,0 +1,305 @@
+<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="KumariCinemas.Home" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid px-4 py-4">
+        
+        <!-- Welcome Banner / Hero Section -->
+        <div class="welcome-banner shadow-sm rounded mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <p class="section-label mb-2">DASHBOARD OVERVIEW</p>
+                    <h2 class="welcome-title mb-3">Welcome back</h2>
+                    <p class="welcome-description mb-4">
+                        Management of cinematic experiences begins here. Access comprehensive tools for movie scheduling, theatre allocation, and real-time ticket sales tracking. Use the reports module for data-driven decisions on theatre occupancy and revenue performance.
+                    </p>
+                    <div class="button-group">
+                        <a href="Show.aspx" class="btn btn-emerald btn-lg me-2">
+                            <i class="fas fa-plus-circle me-2"></i> New Movie Show
+                        </a>
+                        <a href="CustomerTicket.aspx" class="btn btn-outline-emerald btn-lg">
+                            View Reports <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="hero-illustration">
+                        <i class="fas fa-film-slash fa-8x text-emerald-light"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Summary Cards -->
+        <div class="row g-4 mb-4">
+            <!-- Data Source Info Banner -->
+            <div class="col-12">
+                <div class="alert alert-info d-flex justify-content-between align-items-center mb-3" role="alert">
+                    <div>
+                        <i class="fas fa-database me-2"></i>
+                        <strong>Live Database Connection:</strong> All statistics below are retrieved in real-time from the Oracle database.
+                        <asp:Label ID="lblLastUpdated" runat="server" CssClass="ms-3 text-muted small"></asp:Label>
+                    </div>
+                    <asp:LinkButton ID="btnRefresh" runat="server" CssClass="btn btn-sm btn-outline-primary" OnClick="btnRefresh_Click">
+                        <i class="fas fa-sync-alt me-1"></i> Refresh Data
+                    </asp:LinkButton>
+                </div>
+            </div>
+
+            <!-- Total Customers Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card shadow-sm rounded border-0" title="Query: SELECT COUNT(*) FROM CUSTOMER">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p class="stat-label mb-1">
+                                    TOTAL CUSTOMERS
+                                    <i class="fas fa-database text-muted ms-1" style="font-size: 0.7rem;" title="Live from database"></i>
+                                </p>
+                                <h3 class="stat-value mb-0">
+                                    <asp:Label ID="lblTotalCustomers" runat="server" Text="0"></asp:Label>
+                                </h3>
+                                <small class="stat-change text-success">
+                                    <i class="fas fa-arrow-up"></i> Active registered users
+                                </small>
+                            </div>
+                            <div class="stat-icon stat-icon-customers">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Movies Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card shadow-sm rounded border-0" title="Query: SELECT COUNT(*) FROM MOVIE">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p class="stat-label mb-1">
+                                    TOTAL MOVIES
+                                    <i class="fas fa-database text-muted ms-1" style="font-size: 0.7rem;" title="Live from database"></i>
+                                </p>
+                                <h3 class="stat-value mb-0">
+                                    <asp:Label ID="lblTotalMovies" runat="server" Text="0"></asp:Label>
+                                </h3>
+                                <small class="stat-change text-muted">
+                                    Across all genres
+                                </small>
+                            </div>
+                            <div class="stat-icon stat-icon-movies">
+                                <i class="fas fa-video"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Theatres Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card shadow-sm rounded border-0" title="Query: SELECT COUNT(*) FROM THEATRE">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p class="stat-label mb-1">
+                                    TOTAL THEATRES
+                                    <i class="fas fa-database text-muted ms-1" style="font-size: 0.7rem;" title="Live from database"></i>
+                                </p>
+                                <h3 class="stat-value mb-0">
+                                    <asp:Label ID="lblTotalTheatres" runat="server" Text="0"></asp:Label>
+                                </h3>
+                                <small class="stat-change text-muted">
+                                    Global Partnered locations
+                                </small>
+                            </div>
+                            <div class="stat-icon stat-icon-theatres">
+                                <i class="fas fa-building"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Tickets Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card stat-card shadow-sm rounded border-0" title="Query: SELECT COUNT(*) FROM TICKET">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p class="stat-label mb-1">
+                                    TOTAL TICKETS
+                                    <i class="fas fa-database text-muted ms-1" style="font-size: 0.7rem;" title="Live from database"></i>
+                                </p>
+                                <h3 class="stat-value mb-0">
+                                    <asp:Label ID="lblTotalTickets" runat="server" Text="0"></asp:Label>
+                                </h3>
+                                <small class="stat-change text-success">
+                                    <i class="fas fa-arrow-up"></i> Sold this period
+                                </small>
+                            </div>
+                            <div class="stat-icon stat-icon-tickets">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Row: Recent Activity & Quick Report Links -->
+        <div class="row g-4">
+            <!-- Recent System Activity -->
+            <div class="col-lg-7">
+                <div class="card shadow-sm rounded border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Recent System Activity</h5>
+                            <a href="#" class="text-emerald small">View All</a>
+                        </div>
+                        <p class="card-subtitle text-muted small mb-0 mt-1">Real-time updates from the booking engine</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-title mb-1"><strong>Alice Thompson</strong></p>
+                                    <p class="activity-description mb-1">Booked 3 tickets for 'Interstellar'</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="activity-time text-muted">2 mins ago</small>
+                                        <span class="badge bg-emerald-light">New Sale</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-title mb-1"><strong>Theatre Support</strong></p>
+                                    <p class="activity-description mb-1">Updated Hall A seating for 'The Matrix'</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="activity-time text-muted">15 mins ago</small>
+                                        <span class="badge bg-secondary">System</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-title mb-1"><strong>Robert Wilson</strong></p>
+                                    <p class="activity-description mb-1">Cancelled reservation for 'Avatar 2'</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="activity-time text-muted">1 hour ago</small>
+                                        <span class="badge bg-warning">Return</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-title mb-1"><strong>System Scheduler</strong></p>
+                                    <p class="activity-description mb-1">Automated show rollover for weekend</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="activity-time text-muted">3 hours ago</small>
+                                        <span class="badge bg-info">Auto</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Report Links -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm rounded border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="card-title mb-0">Quick Report Links</h5>
+                        <p class="card-subtitle text-muted small mb-0 mt-1">One-click access to generated data</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="report-links">
+                            <a href="CustomerTicket.aspx" class="report-link-card">
+                                <div class="report-icon">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                                <div class="report-details">
+                                    <h6 class="mb-1">Customer Ticket Report</h6>
+                                    <p class="mb-0 text-muted small">Detailed purchase history</p>
+                                </div>
+                                <div class="report-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </a>
+
+                            <a href="TheatreMovie.aspx" class="report-link-card">
+                                <div class="report-icon">
+                                    <i class="fas fa-film"></i>
+                                </div>
+                                <div class="report-details">
+                                    <h6 class="mb-1">Theatre Movie Report</h6>
+                                    <p class="mb-0 text-muted small">Screen utilization by film</p>
+                                </div>
+                                <div class="report-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </a>
+
+                            <a href="TopTheatreOccupancy.aspx" class="report-link-card">
+                                <div class="report-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="report-details">
+                                    <h6 class="mb-1">Occupancy Report</h6>
+                                    <p class="mb-0 text-muted small">Top performing theatre halls</p>
+                                </div>
+                                <div class="report-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Hidden SqlDataSources for counts -->
+    <asp:SqlDataSource ID="SqlDataSourceCustomers" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
+        ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
+        SelectCommand="SELECT COUNT(*) AS TOTAL FROM CUSTOMER">
+    </asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="SqlDataSourceMovies" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
+        ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
+        SelectCommand="SELECT COUNT(*) AS TOTAL FROM MOVIE">
+    </asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="SqlDataSourceTheatres" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
+        ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
+        SelectCommand="SELECT COUNT(*) AS TOTAL FROM THEATRE">
+    </asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="SqlDataSourceTickets" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:OracleConnection %>" 
+        ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
+        SelectCommand="SELECT COUNT(*) AS TOTAL FROM TICKET">
+    </asp:SqlDataSource>
+</asp:Content>
