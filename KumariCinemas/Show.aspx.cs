@@ -44,7 +44,7 @@ namespace KumariCinemas
             CombineTimeValues(e.Values);
 
             // Validate show data
-            DateTime? showDate = e.Values["SHOW_DATE"] as DateTime?;
+            DateTime? showDate = ParseDate(e.Values["SHOW_DATE"]);
             string showTime = e.Values["SHOW_TIME"]?.ToString();
             string showType = e.Values["SHOW_TYPE"]?.ToString();
 
@@ -62,7 +62,7 @@ namespace KumariCinemas
         protected void FormView1_ItemUpdating(object sender, FormViewUpdateEventArgs e)
         {
             // Validate show data
-            DateTime? showDate = e.NewValues["SHOW_DATE"] as DateTime?;
+            DateTime? showDate = ParseDate(e.NewValues["SHOW_DATE"]);
             string showTime = e.NewValues["SHOW_TIME"]?.ToString();
             string showType = e.NewValues["SHOW_TYPE"]?.ToString();
 
@@ -88,6 +88,20 @@ namespace KumariCinemas
                 string showTime = $"{ddlHour.SelectedValue}:{ddlMinute.SelectedValue} {ddlAMPM.SelectedValue}";
                 values["SHOW_TIME"] = showTime;
             }
+        }
+
+        /// <summary>
+        /// Safely parse a date value that may come as string or DateTime from form binding
+        /// </summary>
+        private DateTime? ParseDate(object value)
+        {
+            if (value == null)
+                return null;
+            if (value is DateTime dt)
+                return dt;
+            if (DateTime.TryParse(value.ToString(), out DateTime parsed))
+                return parsed;
+            return null;
         }
 
         /// <summary>
