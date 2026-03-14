@@ -134,6 +134,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Show.aspx" />
     <Content Include="Theatre.aspx" />
+    <Content Include="TheatreCityHall.aspx" />
     <Content Include="TheatreMovie.aspx" />
     <Content Include="Ticket.aspx" />
     <Content Include="TopTheatreOccupancy.aspx" />
@@ -193,6 +194,13 @@
     </Compile>
     <Compile Include="Theatre.aspx.designer.cs">
       <DependentUpon>Theatre.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TheatreCityHall.aspx.cs">
+      <DependentUpon>TheatreCityHall.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TheatreCityHall.aspx.designer.cs">
+      <DependentUpon>TheatreCityHall.aspx</DependentUpon>
     </Compile>
     <Compile Include="TheatreMovie.aspx.cs">
       <DependentUpon>TheatreMovie.aspx</DependentUpon>

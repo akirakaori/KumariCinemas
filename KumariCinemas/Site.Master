@@ -60,6 +60,12 @@
                             <a class="nav-link" href="Movie.aspx"><i class="fas fa-video me-1"></i> Movie</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="TheatreCityHall.aspx">
+                                <i class="fas fa-building me-1"></i> Theatre City Hall
+                            </a>
+                        </li>
+                        <!--
+                        <li class="nav-item">
                             <a class="nav-link" href="Theatre.aspx"><i class="fas fa-building me-1"></i> Theatre</a>
                         </li>
                         <li class="nav-item">
@@ -68,6 +74,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="Show.aspx"><i class="fas fa-calendar-alt me-1"></i> Show</a>
                         </li>
+                            -->
+
                         <li class="nav-item">
                             <a class="nav-link" href="Ticket.aspx"><i class="fas fa-ticket-alt me-1"></i> Ticket</a>
                         </li>
