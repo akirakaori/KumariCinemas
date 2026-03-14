@@ -200,7 +200,7 @@
                                         <ItemTemplate>
                                             <asp:LinkButton ID="btnEdit" runat="server"
                                                 CommandName="EditRow"
-                                                CommandArgument='<%# Eval("THEATRE_ID") + "|" + Eval("HALL_ID") + "|" + Eval("CUSTOMER_ID") + "|" + Eval("MOVIE_ID") %>'
+                                                CommandArgument='<%# Eval("THEATRE_ID") + "|" + Eval("HALL_ID") %>'
                                                 CssClass="btn btn-sm btn-outline-primary">
                                                 <i class="fas fa-edit"></i>
                                             </asp:LinkButton>

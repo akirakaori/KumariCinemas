@@ -569,22 +569,20 @@ WHERE THEATRE_ID = :OLD_THEATRE_ID
                 return;
             }
 
-            string[] parts = e.CommandArgument.ToString().Split('|');
-            if (parts.Length != 4)
-            {
-                return;
-            }
-
-            if (!int.TryParse(parts[0], out int theatreId) ||
-                !int.TryParse(parts[1], out int hallId) ||
-                !int.TryParse(parts[2], out int customerId) ||
-                !int.TryParse(parts[3], out int movieId))
-            {
-                return;
-            }
-
             if (e.CommandName == "EditRow")
             {
+                string[] args = e.CommandArgument.ToString().Split('|');
+                if (args.Length != 2)
+                {
+                    return;
+                }
+
+                if (!int.TryParse(args[0], out int theatreId) ||
+                    !int.TryParse(args[1], out int hallId))
+                {
+                    return;
+                }
+
                 ddlTheatre.SelectedValue = theatreId.ToString();
                 LoadCityHallByTheatre();
                 LoadHallByTheatre();
@@ -597,30 +595,56 @@ WHERE THEATRE_ID = :OLD_THEATRE_ID
                     hallItem.Selected = true;
                 }
 
-                var customerItem = ddlCustomer.Items.FindByValue(customerId.ToString());
-                if (customerItem != null)
+                var row = (e.CommandSource as Control)?.NamingContainer as GridViewRow;
+                if (row != null)
                 {
-                    ddlCustomer.ClearSelection();
-                    customerItem.Selected = true;
+                    var dataKey = gvTheatreCityHall.DataKeys[row.RowIndex];
+                    if (dataKey != null)
+                    {
+                        int customerId = Convert.ToInt32(dataKey["CUSTOMER_ID"]);
+                        int movieId = Convert.ToInt32(dataKey["MOVIE_ID"]);
+
+                        var customerItem = ddlCustomer.Items.FindByValue(customerId.ToString());
+                        if (customerItem != null)
+                        {
+                            ddlCustomer.ClearSelection();
+                            customerItem.Selected = true;
+                        }
+
+                        var movieItem = ddlMovie.Items.FindByValue(movieId.ToString());
+                        if (movieItem != null)
+                        {
+                            ddlMovie.ClearSelection();
+                            movieItem.Selected = true;
+                        }
+
+                        hfSelectedTheatreId.Value = theatreId.ToString();
+                        hfSelectedHallId.Value = hallId.ToString();
+                        hfSelectedCustomerId.Value = customerId.ToString();
+                        hfSelectedMovieId.Value = movieId.ToString();
+                    }
                 }
 
-                var movieItem = ddlMovie.Items.FindByValue(movieId.ToString());
-                if (movieItem != null)
-                {
-                    ddlMovie.ClearSelection();
-                    movieItem.Selected = true;
-                }
-
-                hfSelectedTheatreId.Value = theatreId.ToString();
-                hfSelectedHallId.Value = hallId.ToString();
-                hfSelectedCustomerId.Value = customerId.ToString();
-                hfSelectedMovieId.Value = movieId.ToString();
                 btnSave.Enabled = false;
                 btnUpdate.Enabled = true;
                 ShowMessage("Edit mode: update the details and click Update to save changes.", true);
             }
             else if (e.CommandName == "DeleteRow")
             {
+                string[] args = e.CommandArgument.ToString().Split('|');
+                if (args.Length != 4)
+                {
+                    return;
+                }
+
+                if (!int.TryParse(args[0], out int theatreId) ||
+                    !int.TryParse(args[1], out int hallId) ||
+                    !int.TryParse(args[2], out int customerId) ||
+                    !int.TryParse(args[3], out int movieId))
+                {
+                    return;
+                }
+
                 using (var conn = new OracleConnection(ConnectionString))
                 using (var cmd = new OracleCommand(@"DELETE FROM THEATRE_HALL
 WHERE THEATRE_ID = :THEATRE_ID
