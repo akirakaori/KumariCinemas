@@ -69,14 +69,17 @@
         </div>
 
         <!-- Report Results Card -->
-        <div class="crud-card">
-            <div class="crud-card-header">
-                <h3 class="card-header-title mb-0">
-                    <i class="fas fa-film-can me-2"></i>Report Results
-                </h3>
-                <small class="text-muted">Showing 5 results based on your current selection.</small>
+        <div class="section-card">
+            <div class="section-card-header">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-film me-2"></i>
+                    <div>
+                        <h3 class="section-card-title mb-0">Report Results</h3>
+                        <p class="section-card-subtitle mb-0">Movies and schedules for the selected theatre.</p>
+                    </div>
+                </div>
             </div>
-            <div class="crud-card-body p-0">
+            <div class="section-card-body">
                 <div class="table-container">
                     <asp:GridView
                         ID="GridView1"

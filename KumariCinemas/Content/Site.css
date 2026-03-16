@@ -515,6 +515,13 @@ body {
     margin-bottom: 2rem;
 }
 
+.page-header {
+    background: #f6fbff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+}
+
 .section-title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -552,6 +559,69 @@ body {
 }
 
 /* ===================================
+   STANDARD DATA TABLE CARD
+   =================================== */
+.section-card {
+    background-color: #ffffff;
+    border: 1px solid var(--gray-200);
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(15, 118, 110, 0.08);
+    margin-bottom: 2rem;
+}
+
+.section-card-header {
+    background: #e8fcf4;
+    border-bottom: 1px solid rgba(13, 159, 110, 0.25);
+    border-radius: 18px 18px 0 0;
+    padding: 1.25rem 1.75rem;
+}
+
+.section-card-header i {
+    font-size: 1.3rem;
+    color: var(--emerald-primary);
+}
+
+.section-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--emerald-dark);
+    margin-bottom: 0.15rem;
+}
+
+.section-card-subtitle {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    margin: 0;
+}
+
+.section-card-body {
+    padding: 1.5rem;
+}
+
+
+.form-divider {
+    border-top: 2px solid rgba(16, 185, 129, 0.25);
+    margin-bottom: 1.5rem;
+}
+
+.input-card {
+    background-color: #f9fbfc;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.input-card-label {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--bottle-green);
+    margin-bottom: 0.5rem;
+}
+
+/* ===================================
    GRIDVIEW STYLING
    =================================== */
 .table-container {
@@ -566,8 +636,8 @@ table.gridview {
 }
 
 table.gridview th {
-    background: linear-gradient(135deg, var(--emerald-primary), var(--emerald-dark));
-    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #0bb37b, #0b9dc4);
+    color: #ffffff !important;
     font-weight: 700 !important;
     text-align: left;
     padding: 1rem;
@@ -603,19 +673,6 @@ table.gridview tr:last-child td {
     border-bottom: none;
 }
 
-/* GridView Links in Data Cells (Edit/Delete buttons) */
-table.gridview td a {
-    color: var(--emerald-primary);
-    text-decoration: none;
-    font-weight: 500;
-    margin-right: 0.75rem;
-}
-
-table.gridview td a:hover {
-    color: var(--emerald-dark);
-    text-decoration: underline;
-}
-
 /* GridView Pager */
 .gridview-pager {
     padding: 1rem;
@@ -647,6 +704,24 @@ table.gridview td a:hover {
     background-color: var(--emerald-primary);
     color: white;
     border-color: var(--emerald-primary);
+}
+
+/* Table action links */
+.table-action-link {
+    color: var(--emerald-primary);
+    font-weight: 600;
+    text-decoration: none;
+    margin-right: 1rem;
+    transition: color 0.2s ease;
+}
+
+.table-action-link:last-child {
+    margin-right: 0;
+}
+
+.table-action-link:hover {
+    color: var(--emerald-dark);
+    text-decoration: underline;
 }
 
 /* ===================================

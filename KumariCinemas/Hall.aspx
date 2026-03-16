@@ -134,20 +134,23 @@
                 </div>
 
                 <!-- Existing Hall Records Card -->
-                <div class="crud-card">
-                    <div class="crud-card-header">
-                        <h3 class="card-header-title mb-0">
-                            <i class="fas fa-list me-2"></i>Existing Hall Records
-                        </h3>
-                        <small class="text-muted">View and manage all active cinema screens across the theatres.</small>
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-list me-2"></i>
+                            <div>
+                                <h3 class="section-card-title mb-0">Existing Hall Records</h3>
+                                <p class="section-card-subtitle mb-0">View and manage all active cinema screens across the theatres.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="crud-card-body p-0">
+                    <div class="section-card-body">
                         <div class="table-container">
-                            <asp:GridView ID="GridView1" runat="server" 
-                                AllowPaging="True" 
-                                AllowSorting="True" 
-                                AutoGenerateColumns="False" 
-                                DataKeyNames="HALL_ID" 
+                            <asp:GridView ID="GridView1" runat="server"
+                                AllowPaging="True"
+                                AllowSorting="True"
+                                AutoGenerateColumns="False"
+                                DataKeyNames="HALL_ID"
                                 DataSourceID="SqlDataSource1"
                                 CssClass="gridview"
                                 GridLines="None"
@@ -157,7 +160,22 @@
                                     <asp:BoundField DataField="HALL_CAPACITY" HeaderText="Hall Capacity" SortExpression="HALL_CAPACITY" ItemStyle-Width="120px" />
                                     <asp:BoundField DataField="HALL_NAME" HeaderText="Hall Name" SortExpression="HALL_NAME" />
                                     <asp:BoundField DataField="HALL_TYPE" HeaderText="Hall Type" SortExpression="HALL_TYPE" />
-                                    <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
+                                    <asp:TemplateField HeaderText="Actions">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkEdit" runat="server"
+                                                CommandName="Edit"
+                                                CausesValidation="False"
+                                                CssClass="table-action-link">
+                                                Edit
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server"
+                                                CommandName="Delete"
+                                                CssClass="table-action-link"
+                                                OnClientClick="return confirm('Are you sure you want to delete this hall?');">
+                                                Delete
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>
                         </div>

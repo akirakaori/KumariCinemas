@@ -69,14 +69,17 @@
         </div>
 
         <!-- Report Results Card -->
-        <div class="crud-card">
-            <div class="crud-card-header">
-                <h3 class="card-header-title mb-0">
-                    <i class="fas fa-trophy me-2"></i>Top 3 Performers (This Period)
-                </h3>
-                <small class="text-muted">Updated Today 16:45 AM</small>
+        <div class="section-card">
+            <div class="section-card-header">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-trophy me-2"></i>
+                    <div>
+                        <h3 class="section-card-title mb-0">Top 3 Performers (This Period)</h3>
+                        <p class="section-card-subtitle mb-0">Updated live based on the selected movie.</p>
+                    </div>
+                </div>
             </div>
-            <div class="crud-card-body p-0">
+            <div class="section-card-body">
                 <div class="table-container">
                     <asp:GridView
                         ID="GridView1"

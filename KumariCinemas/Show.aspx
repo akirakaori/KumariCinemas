@@ -162,20 +162,23 @@
                 </div>
 
                 <!-- Current Show Schedules Card -->
-                <div class="crud-card" id="gridSection">
-                    <div class="crud-card-header">
-                        <h3 class="card-header-title mb-0">
-                            <i class="fas fa-film me-2"></i>Current Show Schedules
-                        </h3>
-                        <small class="text-muted">Search and filter show schedules by movie or theatre.</small>
+                <div class="section-card" id="gridSection">
+                    <div class="section-card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-film me-2"></i>
+                            <div>
+                                <h3 class="section-card-title mb-0">Current Show Schedules</h3>
+                                <p class="section-card-subtitle mb-0">Search and filter show schedules by movie or theatre.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="crud-card-body p-0">
+                    <div class="section-card-body">
                         <div class="table-container">
-                            <asp:GridView ID="GridView1" runat="server" 
-                                AllowPaging="True" 
-                                AllowSorting="True" 
-                                AutoGenerateColumns="False" 
-                                DataKeyNames="SHOW_ID" 
+                            <asp:GridView ID="GridView1" runat="server"
+                                AllowPaging="True"
+                                AllowSorting="True"
+                                AutoGenerateColumns="False"
+                                DataKeyNames="SHOW_ID"
                                 DataSourceID="SqlDataSource1"
                                 CssClass="gridview"
                                 GridLines="None"
@@ -191,7 +194,22 @@
                                     <asp:BoundField DataField="SHOW_DATE" HeaderText="Show Date" SortExpression="SHOW_DATE" DataFormatString="{0:yyyy-MM-dd}" />
                                     <asp:BoundField DataField="SHOW_TIME" HeaderText="Show Time" SortExpression="SHOW_TIME" />
                                     <asp:BoundField DataField="SHOW_TYPE" HeaderText="Show Type" SortExpression="SHOW_TYPE" />
-                                    <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
+                                    <asp:TemplateField HeaderText="Actions">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkEdit" runat="server"
+                                                CommandName="Edit"
+                                                CausesValidation="False"
+                                                CssClass="table-action-link">
+                                                Edit
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server"
+                                                CommandName="Delete"
+                                                CssClass="table-action-link"
+                                                OnClientClick="return confirm('Are you sure you want to delete this show?');">
+                                                Delete
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>
                         </div>

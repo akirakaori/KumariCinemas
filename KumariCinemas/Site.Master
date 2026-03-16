@@ -75,6 +75,10 @@
                             <a class="nav-link" href="Show.aspx"><i class="fas fa-calendar-alt me-1"></i> Show</a>
                         </li>
                             -->
+                        </li>
+<li class="nav-item">
+    <a class="nav-link" href="Showtime.aspx"><i class="fas fa-calendar-alt me-1"></i> Show Time</a>
+</li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="Ticket.aspx"><i class="fas fa-ticket-alt me-1"></i> Ticket</a>

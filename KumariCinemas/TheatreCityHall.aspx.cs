@@ -1,6 +1,7 @@
 using System;
 using System.Configuration;
 using System.Data;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
@@ -11,90 +12,77 @@ namespace KumariCinemas
     {
         private string ConnectionString => ConfigurationManager.ConnectionStrings["OracleConnection"].ConnectionString;
 
+        private string SortExpression
+        {
+            get { return ViewState["SortExpression"] == null ? "THEATRE_NAME" : ViewState["SortExpression"].ToString(); }
+            set { ViewState["SortExpression"] = value; }
+        }
+
+        private string SortDirection
+        {
+            get { return ViewState["SortDirection"] == null ? "ASC" : ViewState["SortDirection"].ToString(); }
+            set { ViewState["SortDirection"] = value; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 LoadTheatres();
-                LoadCityHalls();
-                LoadHalls();
+                LoadHallDropdownAll();
                 LoadCustomers();
                 LoadMovies();
                 LoadFilterDropdowns();
                 LoadGrid();
-                LoadLocationByCityHall();
-
-                btnSave.Enabled = true;
-                btnUpdate.Enabled = false;
+                ClearForm();
+                // In normal (insert) mode, show only Save
+                btnSave.Visible = true;
+                btnUpdate.Visible = false;
             }
         }
-
-        #region Load Methods
 
         protected void LoadTheatres()
         {
             ddlTheatre.Items.Clear();
 
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand("SELECT THEATRE_ID, THEATRE_NAME FROM THEATRE ORDER BY THEATRE_NAME", conn))
+            using (var cmd = new OracleCommand(@"
+                SELECT THEATRE_ID,
+                       THEATRE_NAME || ' - ' || THEATRE_CITY_HALL AS DISPLAY_NAME
+                FROM THEATRE
+                ORDER BY THEATRE_NAME, THEATRE_CITY_HALL", conn))
             {
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
                 {
                     ddlTheatre.DataSource = reader;
-                    ddlTheatre.DataTextField = "THEATRE_NAME";
+                    ddlTheatre.DataTextField = "DISPLAY_NAME";
                     ddlTheatre.DataValueField = "THEATRE_ID";
                     ddlTheatre.DataBind();
                 }
             }
 
-            ddlTheatre.Items.Insert(0, new ListItem("-- Select Theatre --", string.Empty));
+            ddlTheatre.Items.Insert(0, new ListItem("Select Theatre Branch", string.Empty));
         }
 
-        protected void LoadCityHalls()
+        protected void LoadHallDropdownAll()
         {
-            ddlCityHall.Items.Clear();
-            ddlCityHall.Items.Insert(0, new ListItem("-- Select City Hall --", string.Empty));
-        }
-
-        protected void LoadCityHallByTheatre()
-        {
-            ddlCityHall.Items.Clear();
-
-            if (string.IsNullOrWhiteSpace(ddlTheatre.SelectedValue))
-            {
-                ddlCityHall.Items.Insert(0, new ListItem("-- Select City Hall --", string.Empty));
-                return;
-            }
+            ddlHall.Items.Clear();
 
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand(@"SELECT THEATRE_CITY_HALL
-FROM THEATRE
-WHERE THEATRE_ID = :THEATRE_ID", conn))
+            using (var cmd = new OracleCommand(@"SELECT HALL_ID, HALL_NAME FROM HALL ORDER BY HALL_NAME", conn))
             {
-                cmd.Parameters.Add(":THEATRE_ID", OracleDbType.Int32).Value = Convert.ToInt32(ddlTheatre.SelectedValue);
-
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
                 {
-                    ddlCityHall.DataSource = reader;
-                    ddlCityHall.DataTextField = "THEATRE_CITY_HALL";
-                    ddlCityHall.DataValueField = "THEATRE_CITY_HALL";
-                    ddlCityHall.DataBind();
+                    ddlHall.DataSource = reader;
+                    ddlHall.DataTextField = "HALL_NAME";
+                    ddlHall.DataValueField = "HALL_ID";
+                    ddlHall.DataBind();
                 }
             }
 
-            ddlCityHall.Items.Insert(0, new ListItem("-- Select City Hall --", string.Empty));
-            if (ddlCityHall.Items.Count > 1)
-            {
-                ddlCityHall.SelectedIndex = 1;
-            }
-        }
-
-        protected void LoadHalls()
-        {
-            ddlHall.Items.Clear();
-            ddlHall.Items.Insert(0, new ListItem("-- Select Hall --", string.Empty));
+            ddlHall.Items.Insert(0, new ListItem("Select Hall", string.Empty));
         }
 
         protected void LoadHallByTheatre()
@@ -103,16 +91,17 @@ WHERE THEATRE_ID = :THEATRE_ID", conn))
 
             if (string.IsNullOrWhiteSpace(ddlTheatre.SelectedValue))
             {
-                ddlHall.Items.Insert(0, new ListItem("-- Select Hall --", string.Empty));
+                ddlHall.Items.Insert(0, new ListItem("Select Hall", string.Empty));
                 return;
             }
 
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand(@"SELECT H.HALL_ID, H.HALL_NAME
-FROM HALL H
-JOIN THEATRE_HALL TH ON H.HALL_ID = TH.HALL_ID
-WHERE TH.THEATRE_ID = :THEATRE_ID
-ORDER BY H.HALL_NAME", conn))
+            using (var cmd = new OracleCommand(@"
+                SELECT DISTINCT H.HALL_ID, H.HALL_NAME
+                FROM HALL H
+                JOIN THEATRE_HALL TH ON H.HALL_ID = TH.HALL_ID
+                WHERE TH.THEATRE_ID = :THEATRE_ID
+                ORDER BY H.HALL_NAME", conn))
             {
                 cmd.Parameters.Add(":THEATRE_ID", OracleDbType.Int32).Value = Convert.ToInt32(ddlTheatre.SelectedValue);
 
@@ -126,10 +115,62 @@ ORDER BY H.HALL_NAME", conn))
                 }
             }
 
-            ddlHall.Items.Insert(0, new ListItem("-- Select Hall --", string.Empty));
-            if (ddlHall.Items.Count > 1)
+            ddlHall.Items.Insert(0, new ListItem("Select Hall", string.Empty));
+        }
+
+        protected void LoadHallDetails()
+        {
+            txtHallType.Text = string.Empty;
+            txtHallCapacity.Text = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(ddlHall.SelectedValue))
+                return;
+
+            using (var conn = new OracleConnection(ConnectionString))
+            using (var cmd = new OracleCommand(@"
+                SELECT HALL_TYPE, HALL_CAPACITY
+                FROM HALL
+                WHERE HALL_ID = :HALL_ID", conn))
             {
-                ddlHall.SelectedIndex = 1;
+                cmd.Parameters.Add(":HALL_ID", OracleDbType.Int32).Value = Convert.ToInt32(ddlHall.SelectedValue);
+
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        txtHallType.Text = reader["HALL_TYPE"].ToString();
+                        txtHallCapacity.Text = reader["HALL_CAPACITY"].ToString();
+                    }
+                }
+            }
+        }
+
+        protected void LoadTheatreDetails()
+        {
+            txtCityHall.Text = string.Empty;
+            txtLocation.Text = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(ddlTheatre.SelectedValue))
+                return;
+
+            using (var conn = new OracleConnection(ConnectionString))
+            using (var cmd = new OracleCommand(@"
+                SELECT THEATRE_CITY_HALL, THEATRE_LOCATION
+                FROM THEATRE
+                WHERE THEATRE_ID = :THEATRE_ID", conn))
+            {
+                cmd.Parameters.Add(":THEATRE_ID", OracleDbType.Int32).Value = Convert.ToInt32(ddlTheatre.SelectedValue);
+
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        txtCityHall.Text = reader["THEATRE_CITY_HALL"].ToString();
+                        txtLocation.Text = reader["THEATRE_LOCATION"].ToString();
+                    }
+                }
             }
         }
 
@@ -138,9 +179,7 @@ ORDER BY H.HALL_NAME", conn))
             ddlMovie.Items.Clear();
 
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand(@"SELECT MOVIE_ID, TITLE
-FROM MOVIE
-ORDER BY TITLE", conn))
+            using (var cmd = new OracleCommand(@"SELECT MOVIE_ID, TITLE FROM MOVIE ORDER BY TITLE", conn))
             {
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
@@ -152,7 +191,7 @@ ORDER BY TITLE", conn))
                 }
             }
 
-            ddlMovie.Items.Insert(0, new ListItem("-- Select Movie --", string.Empty));
+            ddlMovie.Items.Insert(0, new ListItem("Select Movie", string.Empty));
         }
 
         protected void LoadCustomers()
@@ -160,9 +199,7 @@ ORDER BY TITLE", conn))
             ddlCustomer.Items.Clear();
 
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand(@"SELECT CUSTOMER_ID, CUSTOMER_NAME
-FROM CUSTOMER
-ORDER BY CUSTOMER_NAME", conn))
+            using (var cmd = new OracleCommand(@"SELECT CUSTOMER_ID, CUSTOMER_NAME FROM CUSTOMER ORDER BY CUSTOMER_NAME", conn))
             {
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
@@ -174,32 +211,37 @@ ORDER BY CUSTOMER_NAME", conn))
                 }
             }
 
-            ddlCustomer.Items.Insert(0, new ListItem("-- Select Customer --", string.Empty));
+            ddlCustomer.Items.Insert(0, new ListItem("Select Customer", string.Empty));
         }
 
         protected void LoadFilterDropdowns()
         {
             ddlFilterTheatre.Items.Clear();
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand("SELECT THEATRE_ID, THEATRE_NAME FROM THEATRE ORDER BY THEATRE_NAME", conn))
+            using (var cmd = new OracleCommand(@"
+                SELECT THEATRE_ID,
+                       THEATRE_NAME || ' - ' || THEATRE_CITY_HALL AS DISPLAY_NAME
+                FROM THEATRE
+                ORDER BY THEATRE_NAME, THEATRE_CITY_HALL", conn))
             {
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
                 {
                     ddlFilterTheatre.DataSource = reader;
-                    ddlFilterTheatre.DataTextField = "THEATRE_NAME";
+                    ddlFilterTheatre.DataTextField = "DISPLAY_NAME";
                     ddlFilterTheatre.DataValueField = "THEATRE_ID";
                     ddlFilterTheatre.DataBind();
                 }
             }
-            ddlFilterTheatre.Items.Insert(0, new ListItem("-- All Theatres --", string.Empty));
+            ddlFilterTheatre.Items.Insert(0, new ListItem("All Theatre Branches", string.Empty));
 
             ddlFilterCityHall.Items.Clear();
             using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand(@"SELECT DISTINCT THEATRE_CITY_HALL
-FROM THEATRE
-WHERE THEATRE_CITY_HALL IS NOT NULL
-ORDER BY THEATRE_CITY_HALL", conn))
+            using (var cmd = new OracleCommand(@"
+                SELECT DISTINCT THEATRE_CITY_HALL
+                FROM THEATRE
+                WHERE THEATRE_CITY_HALL IS NOT NULL
+                ORDER BY THEATRE_CITY_HALL", conn))
             {
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
@@ -210,32 +252,7 @@ ORDER BY THEATRE_CITY_HALL", conn))
                     ddlFilterCityHall.DataBind();
                 }
             }
-            ddlFilterCityHall.Items.Insert(0, new ListItem("-- All City Halls --", string.Empty));
-        }
-
-        protected void LoadLocationByCityHall()
-        {
-            txtLocation.Text = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(ddlCityHall.SelectedValue))
-            {
-                return;
-            }
-
-            using (var conn = new OracleConnection(ConnectionString))
-            using (var cmd = new OracleCommand(@"SELECT THEATRE_LOCATION
-FROM THEATRE
-WHERE THEATRE_CITY_HALL = :CITY_HALL", conn))
-            {
-                cmd.Parameters.Add(":CITY_HALL", OracleDbType.Varchar2).Value = ddlCityHall.SelectedValue;
-
-                conn.Open();
-                object result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
-                {
-                    txtLocation.Text = result.ToString();
-                }
-            }
+            ddlFilterCityHall.Items.Insert(0, new ListItem("All City Halls", string.Empty));
         }
 
         protected void LoadGrid()
@@ -246,46 +263,48 @@ WHERE THEATRE_CITY_HALL = :CITY_HALL", conn))
                 cmd.Connection = conn;
                 cmd.BindByName = true;
 
-                string sql = @"SELECT
-    THL.THEATRE_ID,
-    THL.HALL_ID,
-    THL.CUSTOMER_ID,
-    THL.MOVIE_ID,
-    TH.THEATRE_NAME,
-    TH.THEATRE_CITY_HALL,
-    TH.THEATRE_LOCATION,
-    H.HALL_NAME,
-    H.HALL_TYPE,
-    H.HALL_CAPACITY,
-    C.CUSTOMER_NAME,
-    M.TITLE AS MOVIE_TITLE
-FROM THEATRE_HALL THL
-JOIN THEATRE TH ON THL.THEATRE_ID = TH.THEATRE_ID
-JOIN HALL H ON THL.HALL_ID = H.HALL_ID
-JOIN CUSTOMER C ON THL.CUSTOMER_ID = C.CUSTOMER_ID
-JOIN MOVIE M ON THL.MOVIE_ID = M.MOVIE_ID
-WHERE 1 = 1";
+                StringBuilder sql = new StringBuilder();
+                sql.Append(@"
+                    SELECT
+                        THL.THEATRE_ID,
+                        THL.HALL_ID,
+                        THL.CUSTOMER_ID,
+                        THL.MOVIE_ID,
+                        TH.THEATRE_NAME,
+                        TH.THEATRE_CITY_HALL,
+                        TH.THEATRE_LOCATION,
+                        H.HALL_NAME,
+                        H.HALL_TYPE,
+                        H.HALL_CAPACITY,
+                        C.CUSTOMER_NAME,
+                        M.TITLE AS MOVIE_TITLE
+                    FROM THEATRE_HALL THL
+                    JOIN THEATRE TH ON THL.THEATRE_ID = TH.THEATRE_ID
+                    JOIN HALL H ON THL.HALL_ID = H.HALL_ID
+                    JOIN CUSTOMER C ON THL.CUSTOMER_ID = C.CUSTOMER_ID
+                    JOIN MOVIE M ON THL.MOVIE_ID = M.MOVIE_ID
+                    WHERE 1 = 1");
 
                 if (!string.IsNullOrWhiteSpace(ddlFilterTheatre.SelectedValue))
                 {
-                    sql += " AND THL.THEATRE_ID = :F_THEATRE_ID";
+                    sql.Append(" AND THL.THEATRE_ID = :F_THEATRE_ID");
                     cmd.Parameters.Add(":F_THEATRE_ID", OracleDbType.Int32).Value = Convert.ToInt32(ddlFilterTheatre.SelectedValue);
                 }
 
                 if (!string.IsNullOrWhiteSpace(ddlFilterCityHall.SelectedValue))
                 {
-                    sql += " AND TH.THEATRE_CITY_HALL = :F_CITY_HALL";
+                    sql.Append(" AND TH.THEATRE_CITY_HALL = :F_CITY_HALL");
                     cmd.Parameters.Add(":F_CITY_HALL", OracleDbType.Varchar2).Value = ddlFilterCityHall.SelectedValue;
                 }
 
                 if (!string.IsNullOrWhiteSpace(txtFilterHallName.Text))
                 {
-                    sql += " AND UPPER(H.HALL_NAME) LIKE '%' || UPPER(:F_HALL_NAME) || '%'";
+                    sql.Append(" AND UPPER(H.HALL_NAME) LIKE '%' || UPPER(:F_HALL_NAME) || '%'");
                     cmd.Parameters.Add(":F_HALL_NAME", OracleDbType.Varchar2).Value = txtFilterHallName.Text.Trim();
                 }
 
-                sql += " ORDER BY TH.THEATRE_NAME, H.HALL_NAME";
-                cmd.CommandText = sql;
+                sql.Append($" ORDER BY {SortExpression} {SortDirection}");
+                cmd.CommandText = sql.ToString();
 
                 using (var adapter = new OracleDataAdapter(cmd))
                 {
@@ -297,37 +316,51 @@ WHERE 1 = 1";
             }
         }
 
-        #endregion
-
-        #region Helpers
-
         protected void ClearForm()
         {
-            ddlTheatre.SelectedIndex = 0;
-            LoadCityHalls();
-            ddlCityHall.SelectedIndex = 0;
-            LoadHalls();
-            ddlHall.SelectedIndex = 0;
-            ddlCustomer.SelectedIndex = 0;
-            ddlMovie.SelectedIndex = 0;
+            if (ddlTheatre.Items.Count > 0) ddlTheatre.SelectedIndex = 0;
+            LoadHallDropdownAll();
+            if (ddlHall.Items.Count > 0) ddlHall.SelectedIndex = 0;
+            if (ddlCustomer.Items.Count > 0) ddlCustomer.SelectedIndex = 0;
+            if (ddlMovie.Items.Count > 0) ddlMovie.SelectedIndex = 0;
+
+            txtCityHall.Text = string.Empty;
+            txtLocation.Text = string.Empty;
+            txtHallType.Text = string.Empty;
+            txtHallCapacity.Text = string.Empty;
+
             hfSelectedTheatreId.Value = string.Empty;
             hfSelectedHallId.Value = string.Empty;
             hfSelectedCustomerId.Value = string.Empty;
             hfSelectedMovieId.Value = string.Empty;
 
-            btnSave.Enabled = true;
-            btnUpdate.Enabled = false;
+            // Reset to insert mode: show Save, hide Update
+            btnSave.Visible = true;
+            btnUpdate.Visible = false;
 
             ShowMessage(string.Empty, true);
-            LoadLocationByCityHall();
         }
 
         protected void ShowMessage(string message, bool isSuccess)
         {
             lblMessage.Text = message;
-            lblMessage.CssClass = string.IsNullOrWhiteSpace(message)
-                ? string.Empty
-                : (isSuccess ? "alert alert-success" : "alert alert-danger");
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                lblMessage.Visible = false;
+                lblMessage.CssClass = "d-none";
+                // Ensure any inline styles added by client-side fade are cleared
+                lblMessage.Style.Remove("opacity");
+                lblMessage.Style.Remove("transition");
+                return;
+            }
+
+            // Reset any inline styles from previous fades so the alert displays correctly
+            lblMessage.Style.Remove("opacity");
+            lblMessage.Style.Remove("transition");
+
+            lblMessage.Visible = true;
+            lblMessage.CssClass = isSuccess ? "alert alert-success" : "alert alert-danger";
         }
 
         protected bool ValidateForm(out string errorMessage)
@@ -341,35 +374,18 @@ WHERE 1 = 1";
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(ddlHall.SelectedValue))
-            {
-                errorMessage = "Hall selection is required.";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(ddlCustomer.SelectedValue))
-            {
-                errorMessage = "Customer selection is required.";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(ddlMovie.SelectedValue))
-            {
-                errorMessage = "Movie selection is required.";
-                return false;
-            }
-
             return true;
         }
 
         protected bool AssignmentExists(int theatreId, int hallId, int customerId, int movieId)
         {
-            const string sql = @"SELECT COUNT(*)
-FROM THEATRE_HALL
-WHERE THEATRE_ID = :THEATRE_ID
-  AND HALL_ID = :HALL_ID
-  AND CUSTOMER_ID = :CUSTOMER_ID
-  AND MOVIE_ID = :MOVIE_ID";
+            const string sql = @"
+                SELECT COUNT(*)
+                FROM THEATRE_HALL
+                WHERE THEATRE_ID = :THEATRE_ID
+                  AND HALL_ID = :HALL_ID
+                  AND CUSTOMER_ID = :CUSTOMER_ID
+                  AND MOVIE_ID = :MOVIE_ID";
 
             using (var conn = new OracleConnection(ConnectionString))
             using (var cmd = new OracleCommand(sql, conn))
@@ -380,26 +396,21 @@ WHERE THEATRE_ID = :THEATRE_ID
                 cmd.Parameters.Add(":MOVIE_ID", OracleDbType.Int32).Value = movieId;
 
                 conn.Open();
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-
-                return count > 0;
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
             }
         }
 
-        #endregion
-
-        #region Event Handlers
-
         protected void ddlTheatre_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadCityHallByTheatre();
+            LoadTheatreDetails();
             LoadHallByTheatre();
-            LoadLocationByCityHall();
+            txtHallType.Text = string.Empty;
+            txtHallCapacity.Text = string.Empty;
         }
 
-        protected void ddlCityHall_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlHall_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadLocationByCityHall();
+            LoadHallDetails();
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -409,12 +420,6 @@ WHERE THEATRE_ID = :THEATRE_ID
             if (!ValidateForm(out string validationError))
             {
                 ShowMessage(validationError, false);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(ddlTheatre.SelectedValue))
-            {
-                ShowMessage("Please select a theatre before saving.", false);
                 return;
             }
 
@@ -432,8 +437,9 @@ WHERE THEATRE_ID = :THEATRE_ID
             try
             {
                 using (var conn = new OracleConnection(ConnectionString))
-                using (var cmd = new OracleCommand(@"INSERT INTO THEATRE_HALL (THEATRE_ID, HALL_ID, CUSTOMER_ID, MOVIE_ID)
-VALUES (:THEATRE_ID, :HALL_ID, :CUSTOMER_ID, :MOVIE_ID)", conn))
+                using (var cmd = new OracleCommand(@"
+                    INSERT INTO THEATRE_HALL (THEATRE_ID, HALL_ID, CUSTOMER_ID, MOVIE_ID)
+                    VALUES (:THEATRE_ID, :HALL_ID, :CUSTOMER_ID, :MOVIE_ID)", conn))
                 {
                     cmd.Parameters.Add(":THEATRE_ID", OracleDbType.Int32).Value = theatreId;
                     cmd.Parameters.Add(":HALL_ID", OracleDbType.Int32).Value = hallId;
@@ -501,15 +507,16 @@ VALUES (:THEATRE_ID, :HALL_ID, :CUSTOMER_ID, :MOVIE_ID)", conn))
             try
             {
                 using (var conn = new OracleConnection(ConnectionString))
-                using (var cmd = new OracleCommand(@"UPDATE THEATRE_HALL
-SET THEATRE_ID = :NEW_THEATRE_ID,
-    HALL_ID = :NEW_HALL_ID,
-    CUSTOMER_ID = :NEW_CUSTOMER_ID,
-    MOVIE_ID = :NEW_MOVIE_ID
-WHERE THEATRE_ID = :OLD_THEATRE_ID
-  AND HALL_ID = :OLD_HALL_ID
-  AND CUSTOMER_ID = :OLD_CUSTOMER_ID
-  AND MOVIE_ID = :OLD_MOVIE_ID", conn))
+                using (var cmd = new OracleCommand(@"
+                    UPDATE THEATRE_HALL
+                    SET THEATRE_ID = :NEW_THEATRE_ID,
+                        HALL_ID = :NEW_HALL_ID,
+                        CUSTOMER_ID = :NEW_CUSTOMER_ID,
+                        MOVIE_ID = :NEW_MOVIE_ID
+                    WHERE THEATRE_ID = :OLD_THEATRE_ID
+                      AND HALL_ID = :OLD_HALL_ID
+                      AND CUSTOMER_ID = :OLD_CUSTOMER_ID
+                      AND MOVIE_ID = :OLD_MOVIE_ID", conn))
                 {
                     cmd.Parameters.Add(":NEW_THEATRE_ID", OracleDbType.Int32).Value = updatedTheatreId;
                     cmd.Parameters.Add(":NEW_HALL_ID", OracleDbType.Int32).Value = updatedHallId;
@@ -545,6 +552,7 @@ WHERE THEATRE_ID = :OLD_THEATRE_ID
 
         protected void btnApplyFilter_Click(object sender, EventArgs e)
         {
+            gvTheatreCityHall.PageIndex = 0;
             LoadGrid();
         }
 
@@ -553,6 +561,7 @@ WHERE THEATRE_ID = :OLD_THEATRE_ID
             ddlFilterTheatre.SelectedIndex = 0;
             ddlFilterCityHall.SelectedIndex = 0;
             txtFilterHallName.Text = string.Empty;
+            gvTheatreCityHall.PageIndex = 0;
             LoadGrid();
         }
 
@@ -562,80 +571,29 @@ WHERE THEATRE_ID = :OLD_THEATRE_ID
             LoadGrid();
         }
 
+        protected void gvTheatreCityHall_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            if (SortExpression == e.SortExpression)
+            {
+                SortDirection = SortDirection == "ASC" ? "DESC" : "ASC";
+            }
+            else
+            {
+                SortExpression = e.SortExpression;
+                SortDirection = "ASC";
+            }
+
+            LoadGrid();
+        }
+
         protected void gvTheatreCityHall_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandArgument == null)
-            {
-                return;
-            }
+            if (e.CommandArgument == null) return;
 
             if (e.CommandName == "EditRow")
             {
                 string[] args = e.CommandArgument.ToString().Split('|');
-                if (args.Length != 2)
-                {
-                    return;
-                }
-
-                if (!int.TryParse(args[0], out int theatreId) ||
-                    !int.TryParse(args[1], out int hallId))
-                {
-                    return;
-                }
-
-                ddlTheatre.SelectedValue = theatreId.ToString();
-                LoadCityHallByTheatre();
-                LoadHallByTheatre();
-                LoadLocationByCityHall();
-
-                var hallItem = ddlHall.Items.FindByValue(hallId.ToString());
-                if (hallItem != null)
-                {
-                    ddlHall.ClearSelection();
-                    hallItem.Selected = true;
-                }
-
-                var row = (e.CommandSource as Control)?.NamingContainer as GridViewRow;
-                if (row != null)
-                {
-                    var dataKey = gvTheatreCityHall.DataKeys[row.RowIndex];
-                    if (dataKey != null)
-                    {
-                        int customerId = Convert.ToInt32(dataKey["CUSTOMER_ID"]);
-                        int movieId = Convert.ToInt32(dataKey["MOVIE_ID"]);
-
-                        var customerItem = ddlCustomer.Items.FindByValue(customerId.ToString());
-                        if (customerItem != null)
-                        {
-                            ddlCustomer.ClearSelection();
-                            customerItem.Selected = true;
-                        }
-
-                        var movieItem = ddlMovie.Items.FindByValue(movieId.ToString());
-                        if (movieItem != null)
-                        {
-                            ddlMovie.ClearSelection();
-                            movieItem.Selected = true;
-                        }
-
-                        hfSelectedTheatreId.Value = theatreId.ToString();
-                        hfSelectedHallId.Value = hallId.ToString();
-                        hfSelectedCustomerId.Value = customerId.ToString();
-                        hfSelectedMovieId.Value = movieId.ToString();
-                    }
-                }
-
-                btnSave.Enabled = false;
-                btnUpdate.Enabled = true;
-                ShowMessage("Edit mode: update the details and click Update to save changes.", true);
-            }
-            else if (e.CommandName == "DeleteRow")
-            {
-                string[] args = e.CommandArgument.ToString().Split('|');
-                if (args.Length != 4)
-                {
-                    return;
-                }
+                if (args.Length != 4) return;
 
                 if (!int.TryParse(args[0], out int theatreId) ||
                     !int.TryParse(args[1], out int hallId) ||
@@ -645,28 +603,80 @@ WHERE THEATRE_ID = :OLD_THEATRE_ID
                     return;
                 }
 
-                using (var conn = new OracleConnection(ConnectionString))
-                using (var cmd = new OracleCommand(@"DELETE FROM THEATRE_HALL
-WHERE THEATRE_ID = :THEATRE_ID
-  AND HALL_ID = :HALL_ID
-  AND CUSTOMER_ID = :CUSTOMER_ID
-  AND MOVIE_ID = :MOVIE_ID", conn))
-                {
-                    cmd.Parameters.Add(":THEATRE_ID", OracleDbType.Int32).Value = theatreId;
-                    cmd.Parameters.Add(":HALL_ID", OracleDbType.Int32).Value = hallId;
-                    cmd.Parameters.Add(":CUSTOMER_ID", OracleDbType.Int32).Value = customerId;
-                    cmd.Parameters.Add(":MOVIE_ID", OracleDbType.Int32).Value = movieId;
+                ddlTheatre.SelectedValue = theatreId.ToString();
+                LoadTheatreDetails();
+                LoadHallByTheatre();
 
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
+                if (ddlHall.Items.FindByValue(hallId.ToString()) != null)
+                    ddlHall.SelectedValue = hallId.ToString();
+
+                LoadHallDetails();
+
+                if (ddlCustomer.Items.FindByValue(customerId.ToString()) != null)
+                    ddlCustomer.SelectedValue = customerId.ToString();
+
+                if (ddlMovie.Items.FindByValue(movieId.ToString()) != null)
+                    ddlMovie.SelectedValue = movieId.ToString();
+
+                hfSelectedTheatreId.Value = theatreId.ToString();
+                hfSelectedHallId.Value = hallId.ToString();
+                hfSelectedCustomerId.Value = customerId.ToString();
+                hfSelectedMovieId.Value = movieId.ToString();
+
+                // Switch to edit mode: hide Save and show Update
+                btnSave.Visible = false;
+                btnUpdate.Visible = true;
+                ShowMessage("Edit mode: update the details and click Update to save changes.", true);
+            }
+            else if (e.CommandName == "DeleteRow")
+            {
+                string[] args = e.CommandArgument.ToString().Split('|');
+                if (args.Length != 4) return;
+
+                if (!int.TryParse(args[0], out int theatreId) ||
+                    !int.TryParse(args[1], out int hallId) ||
+                    !int.TryParse(args[2], out int customerId) ||
+                    !int.TryParse(args[3], out int movieId))
+                {
+                    return;
                 }
 
-                LoadGrid();
-                ClearForm();
-                ShowMessage("Hall assignment deleted successfully.", true);
+                try
+                {
+                    using (var conn = new OracleConnection(ConnectionString))
+                    using (var cmd = new OracleCommand(@"
+                        DELETE FROM THEATRE_HALL
+                        WHERE THEATRE_ID = :THEATRE_ID
+                          AND HALL_ID = :HALL_ID
+                          AND CUSTOMER_ID = :CUSTOMER_ID
+                          AND MOVIE_ID = :MOVIE_ID", conn))
+                    {
+                        cmd.Parameters.Add(":THEATRE_ID", OracleDbType.Int32).Value = theatreId;
+                        cmd.Parameters.Add(":HALL_ID", OracleDbType.Int32).Value = hallId;
+                        cmd.Parameters.Add(":CUSTOMER_ID", OracleDbType.Int32).Value = customerId;
+                        cmd.Parameters.Add(":MOVIE_ID", OracleDbType.Int32).Value = movieId;
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    LoadGrid();
+                    ClearForm();
+                    ShowMessage("Hall assignment deleted successfully.", true);
+                }
+                catch (OracleException ex) when (ex.Number == 2292)
+                {
+                    ShowMessage("Unable to delete this record because related records exist in another table.", false);
+                }
+                catch (OracleException ex)
+                {
+                    ShowMessage($"Error deleting hall assignment: {ex.Message}", false);
+                }
+                catch (Exception ex)
+                {
+                    ShowMessage($"An unexpected error occurred: {ex.Message}", false);
+                }
             }
         }
-
-        #endregion
     }
 }

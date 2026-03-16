@@ -61,14 +61,17 @@
         </div>
 
         <!-- Report Results Card -->
-        <div class="crud-card">
-            <div class="crud-card-header">
-                <h3 class="card-header-title mb-0">
-                    <i class="fas fa-receipt me-2"></i>Booking Details
-                </h3>
-                <small class="text-muted">9 Records Found</small>
+        <div class="section-card">
+            <div class="section-card-header">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-receipt me-2"></i>
+                    <div>
+                        <h3 class="section-card-title mb-0">Booking Details</h3>
+                        <p class="section-card-subtitle mb-0">Filtered ticket history for the selected customer.</p>
+                    </div>
+                </div>
             </div>
-            <div class="crud-card-body p-0">
+            <div class="section-card-body">
                 <div class="table-container">
                     <asp:GridView ID="GridView1" runat="server"
                         AutoGenerateColumns="False"

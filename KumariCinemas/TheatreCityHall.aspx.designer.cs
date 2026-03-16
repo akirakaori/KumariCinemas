@@ -87,22 +87,13 @@ namespace KumariCinemas
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTheatre;
 
         /// <summary>
-        /// ddlCityHall control.
+        /// txtCityHall control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCityHall;
-
-        /// <summary>
-        /// rfvCityHall control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCityHall;
+        protected global::System.Web.UI.WebControls.TextBox txtCityHall;
 
         /// <summary>
         /// txtLocation control.
@@ -130,6 +121,24 @@ namespace KumariCinemas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvHall;
+
+        /// <summary>
+        /// txtHallType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtHallType;
+
+        /// <summary>
+        /// txtHallCapacity control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtHallCapacity;
 
         /// <summary>
         /// ddlCustomer control.
@@ -247,14 +256,5 @@ namespace KumariCinemas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvTheatreCityHall;
-
-        /// <summary>
-        /// SqlDataSource1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
     }
 }

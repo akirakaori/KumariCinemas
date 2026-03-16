@@ -133,20 +133,23 @@
                 </div>
 
                 <!-- Registered Theatres Card -->
-                <div class="crud-card">
-                    <div class="crud-card-header">
-                        <h3 class="card-header-title mb-0">
-                            <i class="fas fa-store-alt me-2"></i>Registered Theatres
-                        </h3>
-                        <small class="text-muted">View and manage the list of active cinema locations.</small>
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-store-alt me-2"></i>
+                            <div>
+                                <h3 class="section-card-title mb-0">Registered Theatres</h3>
+                                <p class="section-card-subtitle mb-0">View and manage the list of active cinema locations.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="crud-card-body p-0">
+                    <div class="section-card-body">
                         <div class="table-container">
-                            <asp:GridView ID="GridView1" runat="server" 
-                                AllowPaging="True" 
-                                AllowSorting="True" 
-                                AutoGenerateColumns="False" 
-                                DataKeyNames="THEATRE_ID" 
+                            <asp:GridView ID="GridView1" runat="server"
+                                AllowPaging="True"
+                                AllowSorting="True"
+                                AutoGenerateColumns="False"
+                                DataKeyNames="THEATRE_ID"
                                 DataSourceID="SqlDataSource1"
                                 CssClass="gridview"
                                 GridLines="None"
@@ -156,7 +159,22 @@
                                     <asp:BoundField DataField="THEATRE_NAME" HeaderText="Theatre Name" SortExpression="THEATRE_NAME" />
                                     <asp:BoundField DataField="THEATRE_CITY_HALL" HeaderText="City/Hall" SortExpression="THEATRE_CITY_HALL" />
                                     <asp:BoundField DataField="THEATRE_LOCATION" HeaderText="Location" SortExpression="THEATRE_LOCATION" />
-                                    <asp:CommandField ShowEditButton="True" ShowDeleteButton="True" HeaderText="Actions" ButtonType="Link" />
+                                    <asp:TemplateField HeaderText="Actions">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkEdit" runat="server"
+                                                CommandName="Edit"
+                                                CausesValidation="False"
+                                                CssClass="table-action-link">
+                                                Edit
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="lnkDelete" runat="server"
+                                                CommandName="Delete"
+                                                CssClass="table-action-link"
+                                                OnClientClick="return confirm('Are you sure you want to delete this theatre?');">
+                                                Delete
+                                            </asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>
                         </div>
