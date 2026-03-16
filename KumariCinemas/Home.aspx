@@ -150,61 +150,43 @@
                     </div>
                     <div class="card-body">
                         <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-circle"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title mb-1"><strong>Alice Thompson</strong></p>
-                                    <p class="activity-description mb-1">Booked 3 tickets for 'Interstellar'</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="activity-time text-muted">2 mins ago</small>
-                                        <span class="badge bg-emerald-light">New Sale</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Recent activities will be rendered from the database -->
 
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-circle"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title mb-1"><strong>Theatre Support</strong></p>
-                                    <p class="activity-description mb-1">Updated Hall A seating for 'The Matrix'</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="activity-time text-muted">15 mins ago</small>
-                                        <span class="badge bg-secondary">System</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <asp:Repeater ID="rptRecentActivity" runat="server" DataSourceID="SqlDataSourceRecentActivity">
+<ItemTemplate>
 
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-circle"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title mb-1"><strong>Robert Wilson</strong></p>
-                                    <p class="activity-description mb-1">Cancelled reservation for 'Avatar 2'</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="activity-time text-muted">1 hour ago</small>
-                                        <span class="badge bg-warning">Return</span>
-                                    </div>
-                                </div>
-                            </div>
+<div class="activity-item">
+    <div class="activity-icon">
+        <i class="fas fa-user-circle"></i>
+    </div>
 
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-circle"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <p class="activity-title mb-1"><strong>System Scheduler</strong></p>
-                                    <p class="activity-description mb-1">Automated show rollover for weekend</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="activity-time text-muted">3 hours ago</small>
-                                        <span class="badge bg-info">Auto</span>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="activity-content">
+
+        <p class="activity-title mb-1">
+            <strong><%# Eval("CUSTOMER_NAME") %></strong>
+        </p>
+
+        <p class="activity-description mb-1">
+            Booked ticket for '<%# Eval("TITLE") %>'
+        </p>
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <small class="activity-time text-muted">
+                <%# Eval("BOOKING_DATE","{0:g}") %>
+            </small>
+
+            <span class="badge bg-emerald-light">
+                <%# Eval("STATUS") %>
+            </span>
+
+        </div>
+
+    </div>
+</div>
+
+</ItemTemplate>
+</asp:Repeater>
                         </div>
                     </div>
                 </div>
@@ -264,6 +246,23 @@
         </div>
 
     </div>
+    <asp:SqlDataSource ID="SqlDataSourceRecentActivity" runat="server"
+        ConnectionString="<%$ ConnectionStrings:OracleConnection %>"
+        ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
+        SelectCommand="
+SELECT * FROM (
+    SELECT 
+        C.CUSTOMER_NAME,
+        M.TITLE,
+        T.BOOKING_DATE,
+        T.STATUS
+    FROM TICKET T
+    JOIN SHOW_TICKET ST ON T.TICKET_ID = ST.TICKET_ID
+    JOIN CUSTOMER C ON ST.CUSTOMER_ID = C.CUSTOMER_ID
+    JOIN MOVIE M ON ST.MOVIE_ID = M.MOVIE_ID
+    ORDER BY T.BOOKING_DATE DESC
+) WHERE ROWNUM &lt;= 5">
+    </asp:SqlDataSource>
 
     <!-- Hidden SqlDataSources for counts -->
     <asp:SqlDataSource ID="SqlDataSourceCustomers" runat="server" 
@@ -290,3 +289,4 @@
         SelectCommand="SELECT COUNT(*) AS TOTAL FROM TICKET">
     </asp:SqlDataSource>
 </asp:Content>
+
