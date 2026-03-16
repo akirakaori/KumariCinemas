@@ -2,6 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <meta http-equiv="refresh" content="30" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -130,6 +131,82 @@
                             <div class="stat-icon stat-icon-tickets">
                                 <i class="fas fa-ticket-alt"></i>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Charts Section -->
+        <div class="row g-4 mb-4">
+            <p class="section-label mb-2" style="width: 100%;">ANALYTICS & INSIGHTS</p>
+
+            <!-- Movie Popularity Chart -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm rounded border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-film me-2 text-emerald"></i>Movie Popularity
+                        </h5>
+                        <p class="card-subtitle text-muted small mb-0 mt-1">Tickets sold per movie</p>
+                    </div>
+                    <div class="card-body">
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="moviePopularityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Genre Distribution Chart -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm rounded border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-tag me-2 text-emerald"></i>Genre Distribution
+                        </h5>
+                        <p class="card-subtitle text-muted small mb-0 mt-1">Movies by genre</p>
+                    </div>
+                    <div class="card-body">
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="genreDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Row 2 -->
+        <div class="row g-4 mb-4">
+            <!-- Daily Bookings Chart -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm rounded border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-calendar me-2 text-emerald"></i>Daily Ticket Bookings
+                        </h5>
+                        <p class="card-subtitle text-muted small mb-0 mt-1">Last 30 days booking trend</p>
+                    </div>
+                    <div class="card-body">
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="dailyBookingsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Status Chart -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm rounded border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-check-circle me-2 text-emerald"></i>Ticket Status
+                        </h5>
+                        <p class="card-subtitle text-muted small mb-0 mt-1">Distribution of ticket statuses</p>
+                    </div>
+                    <div class="card-body">
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="ticketStatusChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -288,5 +365,180 @@ SELECT * FROM (
         ProviderName="<%$ ConnectionStrings:OracleConnection.ProviderName %>"
         SelectCommand="SELECT COUNT(*) AS TOTAL FROM TICKET">
     </asp:SqlDataSource>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // Define chart colors
+            var colors = {
+                emerald: '#10b981',
+                emeraldLight: '#d1f4e0',
+                red: '#ef4444',
+                yellow: '#f59e0b',
+                blue: '#3b82f6',
+                purple: '#a855f7',
+                pink: '#ec4899',
+                orange: '#f97316',
+                teal: '#06b6d4',
+                indigo: '#4f46e5'
+            };
+
+            var colorPalette = [
+                colors.emerald, colors.red, colors.blue, colors.yellow,
+                colors.purple, colors.pink, colors.orange, colors.teal,
+                colors.indigo, '#14b8a6'
+            ];
+
+            // Movie Popularity Bar Chart
+            if (typeof moviePopularityData !== 'undefined' && moviePopularityData.labels.length > 0) {
+                var ctx1 = document.getElementById('moviePopularityChart');
+                if (ctx1) {
+                    new Chart(ctx1, {
+                        type: 'bar',
+                        data: {
+                            labels: moviePopularityData.labels,
+                            datasets: [{
+                                label: 'Tickets Sold',
+                                data: moviePopularityData.data,
+                                backgroundColor: colorPalette,
+                                borderColor: colorPalette.map(c => c),
+                                borderWidth: 1,
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            indexAxis: 'y',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Genre Distribution Pie Chart
+            if (typeof genreDistributionData !== 'undefined' && genreDistributionData.labels.length > 0) {
+                var ctx2 = document.getElementById('genreDistributionChart');
+                if (ctx2) {
+                    new Chart(ctx2, {
+                        type: 'pie',
+                        data: {
+                            labels: genreDistributionData.labels,
+                            datasets: [{
+                                data: genreDistributionData.data,
+                                backgroundColor: colorPalette,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 15,
+                                        font: { size: 12 }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Daily Bookings Line Chart
+            if (typeof dailyBookingsData !== 'undefined' && dailyBookingsData.labels.length > 0) {
+                var ctx3 = document.getElementById('dailyBookingsChart');
+                if (ctx3) {
+                    new Chart(ctx3, {
+                        type: 'line',
+                        data: {
+                            labels: dailyBookingsData.labels,
+                            datasets: [{
+                                label: 'Bookings',
+                                data: dailyBookingsData.data,
+                                borderColor: colors.emerald,
+                                backgroundColor: colors.emeraldLight,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: colors.emerald,
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                pointRadius: 4,
+                                pointHoverRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Ticket Status Doughnut Chart
+            if (typeof ticketStatusData !== 'undefined' && ticketStatusData.labels.length > 0) {
+                var ctx4 = document.getElementById('ticketStatusChart');
+                if (ctx4) {
+                    new Chart(ctx4, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ticketStatusData.labels,
+                            datasets: [{
+                                data: ticketStatusData.data,
+                                backgroundColor: colorPalette,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 15,
+                                        font: { size: 12 }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    </script>
 </asp:Content>
 

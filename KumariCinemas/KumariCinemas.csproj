@@ -263,6 +263,15 @@
     <Content Include="COMPREHENSIVE_VALIDATION_IMPLEMENTATION.md" />
     <Content Include="BUILD_ERROR_RESOLUTION.md" />
     <Content Include="BUILD_SUCCESS_SUMMARY.md" />
+    <Content Include="ANALYTICS_CHARTS_IMPLEMENTATION.md" />
+    <Content Include="CHARTS_QUICK_REFERENCE.md" />
+    <Content Include="CHARTS_LAYOUT_DIAGRAM.md" />
+    <Content Include="CHARTS_TESTING_GUIDE.md" />
+    <Content Include="IMPLEMENTATION_SUMMARY.md" />
+    <Content Include="CHANGES_SUMMARY.md" />
+    <Content Include="DOCUMENTATION_INDEX.md" />
+    <Content Include="COMPLETION_CERTIFICATE.md" />
+    <Content Include="DELIVERY_MANIFEST.md" />
     <None Include="Oracle.DataAccess.Common.Configuration.Section.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -279,13 +288,11 @@
     <Content Include="Site.Master" />
     <Content Include="README_LAYOUT.md" />
     <Content Include="QUICK_START.md" />
-    <Content Include="TROUBLESHOOTING.md" />
-    <Content Include="PARSER_ERROR_FIX.md" />
     <Content Include="SCROLL_FIX_SUMMARY.md" />
     <Content Include="SCROLL_FIX_QUICK_REFERENCE.md" />
     <Content Include="SCROLL_FIX_STATUS.md" />
     <Content Include="VALIDATION_IMPLEMENTATION_SUMMARY.md" />
-    <Content Include="VALIDATION_TESTING_GUIDE.md" />
+    <Content Include="QUICK_START_CHARTS.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
