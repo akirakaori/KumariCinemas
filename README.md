@@ -75,6 +75,3 @@ The application uses an Oracle connection string defined in `Web.config`. Update
 - Export options for reports in PDF or Excel format.
 - Audit logging and richer operational analytics.
 
-## License
-
-No license has been specified for this repository.
